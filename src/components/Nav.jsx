@@ -1,6 +1,6 @@
 import { colors } from "../styles/theme";
-
-const NAV_LINKS = ["About", "Skills", "Guide", "Projects", "Certifications", "Contact"];
+import { useLanguage } from "../i18n/LanguageContext";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 function scrollTo(id) {
   const el = document.getElementById(id);
@@ -8,6 +8,9 @@ function scrollTo(id) {
 }
 
 export default function Nav({ active }) {
+  const { t } = useLanguage();
+  const links = t("nav.links");
+
   return (
     <nav
       className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl"
@@ -27,18 +30,19 @@ export default function Nav({ active }) {
         </button>
 
         <div className="hidden md:flex items-center gap-1">
-          {NAV_LINKS.map((label) => (
+          {links.map((link) => (
             <button
-              key={label}
-              onClick={() => scrollTo(label.toLowerCase())}
+              key={link.id}
+              onClick={() => scrollTo(link.id)}
               className="px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:bg-white/5 cursor-pointer bg-transparent border-none"
               style={{
-                color: active === label.toLowerCase() ? colors.teal : colors.gray,
+                color: active === link.id ? colors.teal : colors.gray,
               }}
             >
-              {label}
+              {link.label}
             </button>
           ))}
+          <LanguageSwitcher />
         </div>
       </div>
     </nav>

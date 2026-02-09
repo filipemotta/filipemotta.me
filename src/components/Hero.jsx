@@ -2,9 +2,13 @@ import { colors } from "../styles/theme";
 import FadeIn from "./FadeIn";
 import Counter from "./Counter";
 import Particles from "./Particles";
-import highlights from "../data/highlights";
+import { useLanguage } from "../i18n/LanguageContext";
+import { getHighlights } from "../data/highlights";
 
 export default function Hero() {
+  const { lang, t } = useLanguage();
+  const highlights = getHighlights(lang);
+
   return (
     <section
       id="hero"
@@ -31,7 +35,7 @@ export default function Hero() {
 
         <FadeIn delay={250}>
           <p className="text-xl md:text-2xl font-light mb-4" style={{ color: colors.gray }}>
-            Senior DevOps, Cloud Architect &amp; Engineer
+            {t("hero.subtitle")}
           </p>
         </FadeIn>
 
@@ -40,9 +44,7 @@ export default function Hero() {
             className="text-base max-w-2xl mx-auto leading-relaxed mb-10"
             style={{ color: colors.gray }}
           >
-            Building and scaling cloud-native infrastructure for over 20 years.
-            Kubernetes specialist managing 300+ clusters across AWS, Azure, and
-            GCP with a passion for automation, GitOps, and reliability.
+            {t("hero.description")}
           </p>
         </FadeIn>
 
@@ -53,14 +55,14 @@ export default function Hero() {
               className="px-7 py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer border-none"
               style={{ background: colors.teal, color: colors.dark }}
             >
-              View Projects
+              {t("hero.viewProjects")}
             </button>
             <button
               onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
               className="px-7 py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:bg-white/10 cursor-pointer bg-transparent"
               style={{ border: `1px solid ${colors.cardBorder}`, color: colors.white }}
             >
-              Get in Touch
+              {t("hero.getInTouch")}
             </button>
           </div>
         </FadeIn>

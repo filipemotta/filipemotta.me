@@ -1,8 +1,11 @@
 import { colors } from "../styles/theme";
 import FadeIn from "./FadeIn";
-import publications from "../data/publications";
+import { useLanguage } from "../i18n/LanguageContext";
+import { getPublications } from "../data/publications";
 
 export default function Publications() {
+  const { lang, t } = useLanguage();
+  const publications = getPublications(lang);
   const pub = publications[0];
 
   return (
@@ -13,13 +16,13 @@ export default function Publications() {
             className="text-sm font-semibold tracking-widest uppercase mb-3 text-center"
             style={{ color: colors.teal }}
           >
-            Author
+            {t("publications.label")}
           </p>
           <h2
             className="text-3xl md:text-4xl font-bold mb-16 text-center"
             style={{ color: colors.white }}
           >
-            DevOps with AI Guide
+            {t("publications.heading")}
           </h2>
         </FadeIn>
 
@@ -81,9 +84,9 @@ export default function Publications() {
 
             {/* Topic tags */}
             <div className="flex flex-wrap gap-1.5 mb-6">
-              {pub.topics.map((t) => (
+              {pub.topics.map((topic) => (
                 <span
-                  key={t}
+                  key={topic}
                   className="text-xs px-2 py-0.5 rounded"
                   style={{
                     background: "#0F1C24",
@@ -91,7 +94,7 @@ export default function Publications() {
                     border: `1px solid rgba(63,189,182,0.12)`,
                   }}
                 >
-                  {t}
+                  {topic}
                 </span>
               ))}
             </div>

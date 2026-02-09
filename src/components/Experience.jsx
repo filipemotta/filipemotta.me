@@ -1,9 +1,13 @@
 import { colors } from "../styles/theme";
 import FadeIn from "./FadeIn";
 import TimelineItem from "./TimelineItem";
-import projects from "../data/jobs";
+import { useLanguage } from "../i18n/LanguageContext";
+import { getProjects } from "../data/jobs";
 
 export default function Experience() {
+  const { lang, t } = useLanguage();
+  const projects = getProjects(lang);
+
   return (
     <section id="projects" className="py-24">
       <div className="max-w-6xl mx-auto px-6">
@@ -12,13 +16,13 @@ export default function Experience() {
             className="text-sm font-semibold tracking-widest uppercase mb-3 text-center"
             style={{ color: colors.teal }}
           >
-            Key Projects
+            {t("experience.label")}
           </p>
           <h2
             className="text-3xl md:text-4xl font-bold mb-16 text-center"
             style={{ color: colors.white }}
           >
-            Featured Projects
+            {t("experience.heading")}
           </h2>
         </FadeIn>
 

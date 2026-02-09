@@ -1,48 +1,100 @@
-const skillGroups = [
-  {
-    title: "Cloud & Orchestration",
-    icon: "☸",
-    skills: [
-      { name: "Kubernetes (EKS/GKE/AKS)", level: 97 },
-      { name: "AWS", level: 95 },
-      { name: "Google Cloud Platform", level: 90 },
-      { name: "Microsoft Azure", level: 85 },
-      { name: "Docker & Containers", level: 95 },
-      { name: "Karpenter", level: 90 },
-      { name: "KEDA", level: 88 },
-    ],
-  },
-  {
-    title: "IaC & Automation",
-    icon: "⚙",
-    skills: [
-      { name: "Terraform / Terragrunt", level: 95 },
-      { name: "Ansible", level: 88 },
-      { name: "CI/CD (GitHub Actions, ArgoCD)", level: 93 },
-      { name: "GitOps (ArgoCD, Kustomize, Helm)", level: 92 },
-      { name: "Python / Shell Script", level: 88 },
-    ],
-  },
-  {
-    title: "Service Mesh & Security",
-    icon: "🛡",
-    skills: [
-      { name: "Istio Service Mesh", level: 92 },
-      { name: "Kyverno (Policy Engine)", level: 88 },
-      { name: "API Gateways (AWS, GCP, Azure e Kong)", level: 85 },
-      { name: "Vault (Secrets)", level: 83 },
-    ],
-  },
-  {
-    title: "Observability & Monitoring",
-    icon: "📊",
-    skills: [
-      { name: "Prometheus & AlertManager", level: 94 },
-      { name: "Grafana & Thanos", level: 92 },
-      { name: "ELK Stack", level: 85 },
-      { name: "Datadog", level: 82 },
-    ],
-  },
-];
+const data = {
+  en: [
+    {
+      title: "Cloud & Orchestration",
+      icon: "☸",
+      skills: [
+        { name: "Kubernetes (EKS/GKE/AKS)", level: 97 },
+        { name: "AWS", level: 95 },
+        { name: "Google Cloud Platform", level: 90 },
+        { name: "Microsoft Azure", level: 85 },
+        { name: "Docker & Containers", level: 95 },
+        { name: "Karpenter", level: 90 },
+        { name: "KEDA", level: 88 },
+      ],
+    },
+    {
+      title: "IaC & Automation",
+      icon: "⚙",
+      skills: [
+        { name: "Terraform / Terragrunt", level: 95 },
+        { name: "Ansible", level: 88 },
+        { name: "CI/CD (GitHub Actions, ArgoCD)", level: 93 },
+        { name: "GitOps (ArgoCD, Kustomize, Helm)", level: 92 },
+        { name: "Python / Shell Script", level: 88 },
+      ],
+    },
+    {
+      title: "Service Mesh & Security",
+      icon: "🛡",
+      skills: [
+        { name: "Istio Service Mesh", level: 92 },
+        { name: "Kyverno (Policy Engine)", level: 88 },
+        { name: "API Gateways (AWS, GCP, Azure e Kong)", level: 85 },
+        { name: "Vault (Secrets)", level: 83 },
+      ],
+    },
+    {
+      title: "Observability & Monitoring",
+      icon: "📊",
+      skills: [
+        { name: "Prometheus & AlertManager", level: 94 },
+        { name: "Grafana & Thanos", level: 92 },
+        { name: "ELK Stack", level: 85 },
+        { name: "Datadog", level: 82 },
+      ],
+    },
+  ],
+  pt: [
+    {
+      title: "Cloud & Orquestração",
+      icon: "☸",
+      skills: [
+        { name: "Kubernetes (EKS/GKE/AKS)", level: 97 },
+        { name: "AWS", level: 95 },
+        { name: "Google Cloud Platform", level: 90 },
+        { name: "Microsoft Azure", level: 85 },
+        { name: "Docker & Containers", level: 95 },
+        { name: "Karpenter", level: 90 },
+        { name: "KEDA", level: 88 },
+      ],
+    },
+    {
+      title: "IaC & Automação",
+      icon: "⚙",
+      skills: [
+        { name: "Terraform / Terragrunt", level: 95 },
+        { name: "Ansible", level: 88 },
+        { name: "CI/CD (GitHub Actions, ArgoCD)", level: 93 },
+        { name: "GitOps (ArgoCD, Kustomize, Helm)", level: 92 },
+        { name: "Python / Shell Script", level: 88 },
+      ],
+    },
+    {
+      title: "Service Mesh & Segurança",
+      icon: "🛡",
+      skills: [
+        { name: "Istio Service Mesh", level: 92 },
+        { name: "Kyverno (Policy Engine)", level: 88 },
+        { name: "API Gateways (AWS, GCP, Azure e Kong)", level: 85 },
+        { name: "Vault (Secrets)", level: 83 },
+      ],
+    },
+    {
+      title: "Observabilidade & Monitoramento",
+      icon: "📊",
+      skills: [
+        { name: "Prometheus & AlertManager", level: 94 },
+        { name: "Grafana & Thanos", level: 92 },
+        { name: "ELK Stack", level: 85 },
+        { name: "Datadog", level: 82 },
+      ],
+    },
+  ],
+};
 
-export default skillGroups;
+export function getSkillGroups(lang) {
+  return data[lang] || data.en;
+}
+
+export default data.en;

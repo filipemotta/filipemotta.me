@@ -2,6 +2,7 @@ import { colors } from "../styles/theme";
 import FadeIn from "./FadeIn";
 import TerminalText from "./TerminalText";
 import profileImg from "../assets/profile.png";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const terminalLines = [
   { prompt: true, text: "whoami", color: "#E2E8F0" },
@@ -22,21 +23,17 @@ const terminalLines = [
   { text: "20+ years and counting ▮", color: "#22C55E" },
 ];
 
-const specialties = [
-  { icon: "☁️", title: "Multi-Cloud Mastery", text: "Deep hands-on experience with AWS, GCP, and Azure, designing resilient, scalable architectures that support mission-critical workloads." },
-  { icon: "⚙️", title: "Kubernetes at Enterprise Scale", text: "Expert in EKS, GKE with advanced implementations including Istio service mesh, Karpenter/KEDA autoscaling, Kyverno policy enforcement, and multi-cluster orchestration." },
-  { icon: "🚀", title: "GitOps & Automation", text: "Building frictionless CI/CD pipelines with ArgoCD, Terraform/Terragrunt, GitHub Actions, and Backstage — enabling teams to ship faster with confidence." },
-  { icon: "📊", title: "Observability & Security", text: "Prometheus, Grafana, Datadog, Thanos, and ELK stacks that provide full-stack visibility and proactive incident management." },
-];
-
 export default function About() {
+  const { t } = useLanguage();
+  const specialties = t("about.specialties");
+
   return (
     <section id="about" className="py-24 relative">
       <div className="max-w-6xl mx-auto px-6">
         <FadeIn>
-          <p className="text-sm font-semibold tracking-widest uppercase mb-3 text-center" style={{ color: colors.teal }}>About Me</p>
+          <p className="text-sm font-semibold tracking-widest uppercase mb-3 text-center" style={{ color: colors.teal }}>{t("about.label")}</p>
           <h2 className="text-3xl md:text-4xl font-bold mb-16 text-center" style={{ color: colors.white }}>
-            Turning complex infrastructure into<span style={{ color: colors.teal }}> elegant systems</span>
+            {t("about.heading")}<span style={{ color: colors.teal }}>{t("about.headingAccent")}</span>
           </h2>
         </FadeIn>
 
@@ -52,11 +49,12 @@ export default function About() {
 
             <div className="md:col-span-3">
               <p className="text-lg leading-relaxed mb-5" style={{ color: colors.white }}>
-                I architect and manage cloud-native infrastructure at scale, including experience overseeing{" "}
-                <span style={{ color: colors.teal, fontWeight: 700 }}>300+ Kubernetes clusters</span> on AWS, driving high availability, cost optimization, and developer productivity for global platforms.
+                {t("about.bio1")}{" "}
+                <span style={{ color: colors.teal, fontWeight: 700 }}>{t("about.bio1Accent")}</span>
+                {t("about.bio1End")}
               </p>
               <p className="leading-relaxed mb-5" style={{ color: colors.gray }}>
-                My career spans the full evolution of modern infrastructure — from traditional Linux administration to cutting-edge cloud-native ecosystems. Today, I specialize in:
+                {t("about.bio2")}
               </p>
 
               <div className="grid sm:grid-cols-2 gap-3 mb-6">
@@ -73,18 +71,24 @@ export default function About() {
               </div>
 
               <p className="text-sm leading-relaxed mb-4" style={{ color: colors.gray }}>
-                I hold <span style={{ color: colors.teal, fontWeight: 600 }}>10 industry certifications</span>, including the complete Kubernetes trilogy (CKA, CKAD, CKS), AWS DevOps Professional, GCP Professional DevOps Engineer, and Terraform Associate.
+                {t("about.certs").split("<accent>").map((part, i) => {
+                  if (part.includes("</accent>")) {
+                    const [accent, rest] = part.split("</accent>");
+                    return <span key={i}><span style={{ color: colors.teal, fontWeight: 600 }}>{accent}</span>{rest}</span>;
+                  }
+                  return <span key={i}>{part}</span>;
+                })}
               </p>
               <p className="text-sm leading-relaxed" style={{ color: colors.gray }}>
-                I thrive on solving complex infrastructure challenges, optimizing costs without sacrificing performance, and enabling engineering teams to focus on what matters —{" "}
-                <span style={{ color: colors.white, fontWeight: 500 }}>building great products</span>.
+                {t("about.passion")}{" "}
+                <span style={{ color: colors.white, fontWeight: 500 }}>{t("about.passionAccent")}</span>.
               </p>
 
               <div className="flex items-center gap-2 text-sm mt-5" style={{ color: colors.gray }}>
                 <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" /><circle cx="12" cy="10" r="3" />
                 </svg>
-                Brazil • Remote
+                {t("about.location")}
               </div>
             </div>
           </div>

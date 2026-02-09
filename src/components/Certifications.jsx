@@ -2,8 +2,11 @@ import { colors } from "../styles/theme";
 import FadeIn from "./FadeIn";
 import CertBadge from "./CertBadge";
 import certifications from "../data/certifications";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function Certifications() {
+  const { t } = useLanguage();
+
   return (
     <section id="certifications" className="py-24" style={{ background: colors.darker }}>
       <div className="max-w-6xl mx-auto px-6">
@@ -12,7 +15,7 @@ export default function Certifications() {
             className="text-3xl md:text-4xl font-bold mb-16 text-center"
             style={{ color: colors.white }}
           >
-            Certifications
+            {t("certifications.heading")}
           </h2>
         </FadeIn>
 
