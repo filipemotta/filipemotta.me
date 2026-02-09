@@ -1,26 +1,26 @@
 const publications = [
   {
-    title: "Guia de uso Oficial de DevOps com IA",
-    subtitle: "The AI-Native DevOps Engineer — Guia Definitivo",
+    title: "The Official DevOps with AI Guide",
+    subtitle: "The AI-Native DevOps Engineer — The Definitive Guide",
     description:
-      "Guia completo e interativo sobre a aplicação prática de inteligência artificial em DevOps, SRE e Engenharia de Plataforma. Abrange desde MCP com Kubernetes e Terraform até agentes autônomos de IA, observabilidade inteligente e otimização de custos com FinOps.",
+      "A comprehensive, hands-on guide to applying artificial intelligence in DevOps, SRE, and Platform Engineering. Covers everything from MCP with Kubernetes and Terraform to autonomous AI agents, intelligent observability, and cloud cost optimization with FinOps.",
     stats: [
-      { label: "Capítulos", value: "15" },
-      { label: "Páginas", value: "300+" },
-      { label: "Seções Práticas", value: "80+" },
+      { label: "Chapters", value: "15" },
+      { label: "Pages", value: "300+" },
+      { label: "Practical Sections", value: "80+" },
     ],
     topics: [
       "MCP + Kubernetes / Terraform / Prometheus",
       "Claude & Cursor AI IDE",
-      "Agentes Autônomos de IA",
-      "CI/CD com IA",
-      "Observabilidade com IA",
+      "Autonomous AI Agents",
+      "CI/CD with AI",
+      "Observability with AI",
       "FinOps",
-      "RAG com Qdrant",
-      "Governança & Guardrails",
+      "RAG with Qdrant",
+      "Governance & Guardrails",
     ],
     url: "https://www.devops-ai.tech",
-    linkLabel: "Acessar o Guia",
+    linkLabel: "Access the Guide",
   },
 ];
 

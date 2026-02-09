@@ -6,20 +6,20 @@ export default function Publications() {
   const pub = publications[0];
 
   return (
-    <section id="publications" className="py-24">
+    <section id="guide" className="py-24">
       <div className="max-w-6xl mx-auto px-6">
         <FadeIn>
           <p
             className="text-sm font-semibold tracking-widest uppercase mb-3 text-center"
             style={{ color: colors.teal }}
           >
-            Publications
+            Author
           </p>
           <h2
             className="text-3xl md:text-4xl font-bold mb-16 text-center"
             style={{ color: colors.white }}
           >
-            Featured Publication
+            DevOps with AI Guide
           </h2>
         </FadeIn>
 
