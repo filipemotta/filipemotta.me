@@ -30,11 +30,8 @@ export default function Hero() {
         </FadeIn>
 
         <FadeIn delay={250}>
-          <p className="text-xl md:text-2xl font-light mb-1" style={{ color: colors.gray }}>
-            Senior DevOps &amp; Cloud Engineer
-          </p>
-          <p className="text-lg md:text-xl font-light mb-4" style={{ color: colors.gray }}>
-            Arquiteto e Engenheiro Cloud
+          <p className="text-xl md:text-2xl font-light mb-4" style={{ color: colors.gray }}>
+            Senior DevOps, Cloud Architect &amp; Engineer
           </p>
         </FadeIn>
 
