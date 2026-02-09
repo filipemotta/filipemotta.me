@@ -1,6 +1,6 @@
 import { colors } from "../styles/theme";
 
-const NAV_LINKS = ["About", "Skills", "Projects", "Certifications", "Contact"];
+const NAV_LINKS = ["About", "Skills", "Publications", "Projects", "Certifications", "Contact"];
 
 function scrollTo(id) {
   const el = document.getElementById(id);

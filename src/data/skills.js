@@ -8,6 +8,8 @@ const skillGroups = [
       { name: "Google Cloud Platform", level: 90 },
       { name: "Microsoft Azure", level: 85 },
       { name: "Docker & Containers", level: 95 },
+      { name: "Karpenter", level: 90 },
+      { name: "KEDA", level: 88 },
     ],
   },
   {
@@ -27,7 +29,7 @@ const skillGroups = [
     skills: [
       { name: "Istio Service Mesh", level: 92 },
       { name: "Kyverno (Policy Engine)", level: 88 },
-      { name: "Kong API Gateway", level: 85 },
+      { name: "API Gateways (AWS, GCP, Azure e Kong)", level: 85 },
       { name: "Vault (Secrets)", level: 83 },
     ],
   },

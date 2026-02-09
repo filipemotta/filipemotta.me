@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const SECTIONS = ["about", "skills", "projects", "certifications", "contact"];
+const SECTIONS = ["about", "skills", "publications", "projects", "certifications", "contact"];
 
 /**
  * Returns the id of whichever section is closest to the top of the viewport.
