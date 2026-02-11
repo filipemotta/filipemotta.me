@@ -66,8 +66,8 @@ const pt = {
     heading: "Certificações",
   },
   publications: {
-    label: "Autor",
-    heading: "Guia DevOps com IA",
+    label: "Fundador",
+    heading: "Guia Definitivo DevOps com IA",
   },
   contact: {
     label: "Vamos Conversar",

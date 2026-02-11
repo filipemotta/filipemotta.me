@@ -66,8 +66,8 @@ const en = {
     heading: "Certifications",
   },
   publications: {
-    label: "Author",
-    heading: "DevOps with AI Guide",
+    label: "Founder",
+    heading: "Definitive DevOps AI Guide",
   },
   contact: {
     label: "Let\u2019s Connect",
