@@ -7,7 +7,7 @@ export default function Particles({ count = 20 }) {
         id: i,
         left: Math.random() * 100,
         top: Math.random() * 100,
-        size: 2 + Math.random() * 3,
+        size: 1 + Math.random() * 2,
         dur: 15 + Math.random() * 25,
         delay: Math.random() * 10,
       })),
@@ -25,18 +25,12 @@ export default function Particles({ count = 20 }) {
             top: `${p.top}%`,
             width: p.size,
             height: p.size,
-            background: "#3FBDB6",
-            opacity: 0.15,
+            background: "#ffffff",
+            opacity: 0.08,
             animation: `particleFloat ${p.dur}s ease-in-out ${p.delay}s infinite alternate`,
           }}
         />
       ))}
-      <style>{`
-        @keyframes particleFloat {
-          0%   { transform: translateY(0) translateX(0); }
-          100% { transform: translateY(-80px) translateX(40px); }
-        }
-      `}</style>
     </div>
   );
 }

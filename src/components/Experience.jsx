@@ -9,21 +9,19 @@ export default function Experience() {
   const projects = getProjects(lang);
 
   return (
-    <section id="projects" className="py-24">
+    <section id="projects" className="py-24 border-t border-white/5">
       <div className="max-w-6xl mx-auto px-6">
         <FadeIn>
-          <p
-            className="text-sm font-semibold tracking-widest uppercase mb-3 text-center"
-            style={{ color: colors.teal }}
-          >
-            {t("experience.label")}
-          </p>
-          <h2
-            className="text-3xl md:text-4xl font-bold mb-16 text-center"
-            style={{ color: colors.white }}
-          >
-            {t("experience.heading")}
-          </h2>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div>
+              <p className="text-sky-500 font-mono text-xs tracking-widest uppercase mb-2">
+                {t("experience.label")}
+              </p>
+              <h2 className="text-3xl font-medium tracking-tight text-white">
+                {t("experience.heading")}
+              </h2>
+            </div>
+          </div>
         </FadeIn>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
