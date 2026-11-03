@@ -3,7 +3,7 @@ const en = {
     links: [
       { label: "About", id: "about" },
       { label: "Skills", id: "skills" },
-      { label: "Guide", id: "guide" },
+      { label: "Books", id: "guide" },
       { label: "Projects", id: "projects" },
       { label: "Certifications", id: "certifications" },
       { label: "Contact", id: "contact" },
@@ -66,8 +66,8 @@ const en = {
     heading: "Certifications",
   },
   publications: {
-    label: "Founder",
-    heading: "Definitive DevOps AI Guide",
+    label: "Publications",
+    heading: "Guides and Ebooks",
   },
   contact: {
     label: "Let\u2019s Connect",

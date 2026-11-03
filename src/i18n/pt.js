@@ -3,7 +3,7 @@ const pt = {
     links: [
       { label: "Sobre", id: "about" },
       { label: "Skills", id: "skills" },
-      { label: "Guia", id: "guide" },
+      { label: "Livros", id: "guide" },
       { label: "Projetos", id: "projects" },
       { label: "Certificações", id: "certifications" },
       { label: "Contato", id: "contact" },
@@ -66,8 +66,8 @@ const pt = {
     heading: "Certificações",
   },
   publications: {
-    label: "Fundador",
-    heading: "Guia Definitivo DevOps com IA",
+    label: "Publicações",
+    heading: "Guias e Ebooks",
   },
   contact: {
     label: "Vamos Conversar",

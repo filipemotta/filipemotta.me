@@ -6,7 +6,6 @@ import { getPublications } from "../data/publications";
 export default function Publications() {
   const { lang, t } = useLanguage();
   const publications = getPublications(lang);
-  const pub = publications[0];
 
   return (
     <section id="guide" className="py-24 border-t border-white/5">
@@ -20,15 +19,16 @@ export default function Publications() {
           </h2>
         </FadeIn>
 
-        <FadeIn delay={150}>
-          <div className="max-w-4xl mx-auto glass-panel rounded-3xl p-8 md:p-10 relative overflow-hidden group hover:border-white/20 transition-all duration-500">
+        {publications.map((pub, i) => (
+        <FadeIn key={pub.title} delay={150 + i * 100}>
+          <div className="max-w-4xl mx-auto mb-8 glass-panel rounded-3xl p-8 md:p-10 relative overflow-hidden group hover:border-white/20 transition-all duration-500">
             {/* Subtle glow on hover */}
             <div className="absolute -inset-1 bg-gradient-to-r from-sky-500/5 to-blue-500/5 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
             <div className="relative z-10">
               <div className="flex items-center gap-3 mb-4">
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] uppercase font-semibold tracking-wider text-white/80 bg-white/5 border border-white/10">
-                  NEW
+                  {pub.badge}
                 </span>
               </div>
 
@@ -76,8 +76,7 @@ export default function Publications() {
               <div className="flex items-center gap-3">
                 <a
                   href={pub.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...(pub.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   className="group/btn flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-black text-sm font-medium hover:bg-neutral-200 transition-colors"
                 >
                   {pub.linkLabel}
@@ -97,6 +96,7 @@ export default function Publications() {
             </div>
           </div>
         </FadeIn>
+        ))}
       </div>
     </section>
   );

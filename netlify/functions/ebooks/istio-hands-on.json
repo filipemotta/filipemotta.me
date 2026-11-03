@@ -1,0 +1,19 @@
+{
+  "slug": "istio-hands-on",
+  "version": "v1.0",
+  "date": "2026-11-03",
+  "title": "Istio, Hands-On",
+  "files": {
+    "screen": {
+      "path": "istio-hands-on/v1.0/istio-hands-on-v1.0.pdf",
+      "name": "istio-hands-on-v1.0.pdf",
+      "pages": 159,
+      "bytes": 12032821
+    },
+    "epub": {
+      "path": "istio-hands-on/v1.0/istio-hands-on-v1.0.epub",
+      "name": "istio-hands-on-v1.0.epub",
+      "bytes": 11150980
+    }
+  }
+}
