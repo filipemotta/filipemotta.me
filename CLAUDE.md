@@ -36,11 +36,19 @@ Google Fonts (Plus Jakarta Sans, JetBrains Mono) loaded via a `<link>` tag in Ap
 
 ## Adding a post
 
-Posts live in `src/data/posts.js` and render in the Posts section (`src/components/Posts.jsx`, `id="posts"`, between Publications and Experience). To add one, append a single object to the array; no other file needs to change. Order in the file is irrelevant (sorted by `date` desc). An empty array hides the section and its nav link.
+Posts live in `src/data/posts.js` and appear in three places, all built from the same `PostCard` (`src/components/Posts.jsx`):
+
+- Home Posts section (`id="posts"`, between Publications and Experience): 3 per page, paginated in place, plus a "See all posts" link to `/posts`.
+- `/posts` (`src/pages/PostsPage.jsx`): all posts, 6 per page, page in the URL (`/posts?page=2`).
+- `/posts/<slug>` (`src/pages/PostPage.jsx`): permalink with full text; sets document title and meta description.
+
+To add one, append a single object to the array; no other file needs to change. Order in the file is irrelevant (sorted by `date` desc). An empty array hides the home section and its nav link.
+
+Routing uses `react-router-dom` (`BrowserRouter` in `src/index.jsx`, routes in `App.jsx`). On Netlify, `netlify.toml` rewrites only `/posts` and `/posts/*` to `/index.html` (status 200, not forced) so `/istio/` and functions are untouched. If you add a new client-side route, add a matching rewrite there. New UI strings go in both `src/i18n/en.js` and `src/i18n/pt.js`.
 
 | Field | Required | Notes |
 |---|---|---|
-| `slug` | yes | Unique, URL-safe. Anchor is `#post-<slug>`. |
+| `slug` | yes | Unique, URL-safe. Permalink is `/posts/<slug>`; changing it breaks shared links. Legacy `#post-<slug>` anchors on home redirect to the permalink. |
 | `date` | yes | `yyyy-mm-dd`. Shown formatted in the current site language. |
 | `title` | yes | |
 | `text` | yes | Full text (template literal). Blank line = new paragraph; single newlines become `<br>`; plain `http(s)://` URLs are auto-linked. Posts over ~700 chars collapse behind "Read more / Ler mais". |

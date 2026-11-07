@@ -1,12 +1,14 @@
 /**
- * Posts shown in the "Posts" section.
+ * Posts shown in the home "Posts" section (3 per page), on /posts (6 per
+ * page) and each on its own permalink page, /posts/<slug>.
  *
  * To add a post, append one object to the array below. Order in this file
  * does not matter: the component sorts by `date`, newest first. If the array
- * is empty, the section and its nav link are hidden.
+ * is empty, the home section and its nav link are hidden.
  *
  * Schema:
- *   slug        string   required  Unique, URL-safe id. Anchor becomes #post-<slug>.
+ *   slug        string   required  Unique, URL-safe id. Permalink becomes /posts/<slug>
+ *                                  (legacy #post-<slug> anchors redirect there).
  *   date        string   required  Publication date, "yyyy-mm-dd".
  *   title       string   required  Post title.
  *   text        string   required  Full post text. Line breaks are preserved
