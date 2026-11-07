@@ -4,6 +4,7 @@ const pt = {
       { label: "Sobre", id: "about" },
       { label: "Skills", id: "skills" },
       { label: "Livros", id: "guide" },
+      { label: "Posts", id: "posts" },
       { label: "Projetos", id: "projects" },
       { label: "Certificações", id: "certifications" },
       { label: "Contato", id: "contact" },
@@ -68,6 +69,13 @@ const pt = {
   publications: {
     label: "Publicações",
     heading: "Guias e Ebooks",
+  },
+  posts: {
+    label: "Posts",
+    heading: "Notas sobre Cloud & Plataforma",
+    readMore: "Ler mais",
+    readLess: "Mostrar menos",
+    source: "Fonte",
   },
   contact: {
     label: "Vamos Conversar",

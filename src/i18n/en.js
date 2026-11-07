@@ -4,6 +4,7 @@ const en = {
       { label: "About", id: "about" },
       { label: "Skills", id: "skills" },
       { label: "Books", id: "guide" },
+      { label: "Posts", id: "posts" },
       { label: "Projects", id: "projects" },
       { label: "Certifications", id: "certifications" },
       { label: "Contact", id: "contact" },
@@ -68,6 +69,13 @@ const en = {
   publications: {
     label: "Publications",
     heading: "Guides and Ebooks",
+  },
+  posts: {
+    label: "Posts",
+    heading: "Notes on Cloud & Platform",
+    readMore: "Read more",
+    readLess: "Show less",
+    source: "Source",
   },
   contact: {
     label: "Let\u2019s Connect",

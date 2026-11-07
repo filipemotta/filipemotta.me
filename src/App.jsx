@@ -5,6 +5,7 @@ import Hero from "./components/Hero";
 import About from "./components/About";
 import Skills from "./components/Skills";
 import Publications from "./components/Publications";
+import Posts from "./components/Posts";
 import Experience from "./components/Experience";
 import Certifications from "./components/Certifications";
 import Contact from "./components/Contact";
@@ -22,6 +23,7 @@ export default function App() {
       <About />
       <Skills />
       <Publications />
+      <Posts />
       <Experience />
       <Certifications />
       <Contact />
