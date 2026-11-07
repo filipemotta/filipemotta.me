@@ -1,6 +1,7 @@
 import { colors } from "../styles/theme";
 import { useLanguage } from "../i18n/LanguageContext";
 import LanguageSwitcher from "./LanguageSwitcher";
+import posts from "../data/posts";
 
 function scrollTo(id) {
   const el = document.getElementById(id);
@@ -9,7 +10,8 @@ function scrollTo(id) {
 
 export default function Nav({ active }) {
   const { t } = useLanguage();
-  const links = t("nav.links");
+  // Hide the Posts link when there are no posts (the section is hidden too).
+  const links = t("nav.links").filter((link) => link.id !== "posts" || posts.length > 0);
 
   return (
     <nav className="fixed top-0 w-full z-50 glass-nav transition-all duration-300">

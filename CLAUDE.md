@@ -33,3 +33,20 @@ Tailwind utility classes for layout/spacing, inline styles referencing `theme.js
 ### Fonts
 
 Google Fonts (Plus Jakarta Sans, JetBrains Mono) loaded via a `<link>` tag in App.jsx, URL defined in `theme.js`.
+
+## Adding a post
+
+Posts live in `src/data/posts.js` and render in the Posts section (`src/components/Posts.jsx`, `id="posts"`, between Publications and Experience). To add one, append a single object to the array; no other file needs to change. Order in the file is irrelevant (sorted by `date` desc). An empty array hides the section and its nav link.
+
+| Field | Required | Notes |
+|---|---|---|
+| `slug` | yes | Unique, URL-safe. Anchor is `#post-<slug>`. |
+| `date` | yes | `yyyy-mm-dd`. Shown formatted in the current site language. |
+| `title` | yes | |
+| `text` | yes | Full text (template literal). Blank line = new paragraph; single newlines become `<br>`; plain `http(s)://` URLs are auto-linked. Posts over ~700 chars collapse behind "Read more / Ler mais". |
+| `sourceUrl` | yes | Original source of the subject (changelog, official blog, docs). Rendered as the "Source / Fonte" link. |
+| `sourceLabel` | no | Link text; defaults to the URL hostname. |
+| `tags` | no | Array of short strings. |
+| `lang` | yes | `'pt'` or `'en'`: language the post is written in. |
+
+Rule: the Posts area must never mention or link to LinkedIn or X/Twitter (no share buttons, no "originally posted on").
