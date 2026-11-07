@@ -1,19 +1,20 @@
 import { Link, useParams } from "react-router-dom";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
-import { PostCard, sortedPosts, excerpt } from "../components/Posts";
+import { PostCard, sortedPosts, excerpt, localizePost } from "../components/Posts";
 import { useLanguage } from "../i18n/LanguageContext";
 import useDocumentMeta from "../hooks/useDocumentMeta";
 
 /** /posts/:slug — permalink page for a single post. */
 export default function PostPage() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const { slug } = useParams();
   const post = sortedPosts.find((p) => p.slug === slug);
+  const localized = post && localizePost(post, lang);
 
   useDocumentMeta(
-    post ? `${post.title} — Filipe Motta` : `${t("posts.notFound")} — Filipe Motta`,
-    post ? excerpt(post.text) : undefined
+    localized ? `${localized.title} — Filipe Motta` : `${t("posts.notFound")} — Filipe Motta`,
+    localized ? excerpt(localized.text) : undefined
   );
 
   return (

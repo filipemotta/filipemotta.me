@@ -15,6 +15,38 @@ export const sortedPosts = [...posts].sort((a, b) => b.date.localeCompare(a.date
 
 export const postPath = (slug) => `/posts/${slug}`;
 
+const OTHER_LANG = { en: "pt", pt: "en" };
+
+/**
+ * Resolves a localized value ({ en, pt } or a plain string) for `lang`, falling
+ * back to the other language. Returns [value, languageActuallyUsed].
+ */
+function pick(value, lang) {
+  if (value == null || typeof value === "string") return [value, lang];
+  if (value[lang]) return [value[lang], lang];
+  const other = OTHER_LANG[lang] || "en";
+  return [value[other], other];
+}
+
+/**
+ * Flattens a bilingual post for the given site language. `titleLang` and
+ * `textLang` say which language was actually used (differs on fallback), for
+ * the `lang` attribute.
+ */
+export function localizePost(post, lang) {
+  const [title, titleLang] = pick(post.title, lang);
+  const [text, textLang] = pick(post.text, lang);
+  return {
+    ...post,
+    title,
+    titleLang,
+    text,
+    textLang,
+    sourceLabel: pick(post.sourceLabel, lang)[0],
+    tags: post.tags?.map((tag) => pick(tag, lang)[0]),
+  };
+}
+
 /** Plain-text excerpt for meta descriptions. */
 export function excerpt(text, max = 160) {
   const flat = text.replace(/https?:\/\/\S+/g, "").replace(/\s+/g, " ").trim();
@@ -80,8 +112,9 @@ function PostText({ text }) {
  * A post card. `full` renders the permalink-page variant: no collapsing and the
  * title as the page's h1 instead of a link.
  */
-export function PostCard({ post, full = false }) {
+export function PostCard({ post: rawPost, full = false }) {
   const { lang, t } = useLanguage();
+  const post = localizePost(rawPost, lang);
   const collapsible = !full && post.text.length > COLLAPSE_THRESHOLD;
   const [expanded, setExpanded] = useState(false);
   const collapsed = collapsible && !expanded;
@@ -94,28 +127,25 @@ export function PostCard({ post, full = false }) {
       <div className="absolute -inset-1 bg-gradient-to-r from-sky-500/5 to-blue-500/5 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
       <div className="relative z-10">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="mb-4">
           <time dateTime={post.date} className="font-mono text-xs text-white/40">
             {formatDate(post.date, lang)}
           </time>
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] uppercase font-semibold tracking-wider text-white/60 bg-white/5 border border-white/10">
-            {post.lang}
-          </span>
         </div>
 
         {full ? (
-          <h1 className="text-3xl md:text-4xl font-medium tracking-tight text-white mb-6" lang={post.lang}>
+          <h1 className="text-3xl md:text-4xl font-medium tracking-tight text-white mb-6" lang={post.titleLang}>
             {post.title}
           </h1>
         ) : (
-          <h3 className="text-2xl font-medium tracking-tight text-white mb-5" lang={post.lang}>
+          <h3 className="text-2xl font-medium tracking-tight text-white mb-5" lang={post.titleLang}>
             <Link to={postPath(post.slug)} className="hover:text-sky-300 transition-colors">
               {post.title}
             </Link>
           </h3>
         )}
 
-        <div className="relative" lang={post.lang}>
+        <div className="relative" lang={post.textLang}>
           <div className={collapsed ? "max-h-64 overflow-hidden" : ""}>
             <PostText text={post.text} />
           </div>

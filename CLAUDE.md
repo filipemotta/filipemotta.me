@@ -46,15 +46,30 @@ To add one, append a single object to the array; no other file needs to change. 
 
 Routing uses `react-router-dom` (`BrowserRouter` in `src/index.jsx`, routes in `App.jsx`). On Netlify, `netlify.toml` rewrites only `/posts` and `/posts/*` to `/index.html` (status 200, not forced) so `/istio/` and functions are untouched. If you add a new client-side route, add a matching rewrite there. New UI strings go in both `src/i18n/en.js` and `src/i18n/pt.js`.
 
+Posts are bilingual and follow the site's PT/EN switcher (cards, `/posts`, `/posts/<slug>`, and the permalink's document title/meta description). Localized fields are objects `{ en, pt }`; if the current language is missing, the other one is shown (`localizePost` in `src/components/Posts.jsx`). Write both versions for every new post; keep commands, versions, CVE ids and URLs identical across them, and keep the same paragraph/list structure.
+
+```js
+{
+  slug: "my-post",
+  date: "2026-11-07",
+  title: { en: "English title", pt: "Título em português" },
+  text: { en: `English text…`, pt: `Texto em português…` },
+  sourceUrl: "https://example.com/changelog",
+  sourceLabel: "Example Changelog",                 // or { en, pt }
+  tags: ["Kubernetes", { en: "Security", pt: "Segurança" }],
+}
+```
+
 | Field | Required | Notes |
 |---|---|---|
-| `slug` | yes | Unique, URL-safe. Permalink is `/posts/<slug>`; changing it breaks shared links. Legacy `#post-<slug>` anchors on home redirect to the permalink. |
-| `date` | yes | `yyyy-mm-dd`. Shown formatted in the current site language. |
-| `title` | yes | |
-| `text` | yes | Full text (template literal). Blank line = new paragraph; single newlines become `<br>`; plain `http(s)://` URLs are auto-linked. Posts over ~700 chars collapse behind "Read more / Ler mais". |
-| `sourceUrl` | yes | Original source of the subject (changelog, official blog, docs). Rendered as the "Source / Fonte" link. |
-| `sourceLabel` | no | Link text; defaults to the URL hostname. |
-| `tags` | no | Array of short strings. |
-| `lang` | yes | `'pt'` or `'en'`: language the post is written in. |
+| `slug` | yes | Shared. Unique, URL-safe. Permalink is `/posts/<slug>`; changing it breaks shared links. Legacy `#post-<slug>` anchors on home redirect to the permalink. |
+| `date` | yes | Shared. `yyyy-mm-dd`. Shown formatted in the current site language. |
+| `title` | yes | `{ en, pt }` (at least one). |
+| `text` | yes | `{ en, pt }` (at least one), each a template literal. Blank line = new paragraph; single newlines become `<br>`; plain `http(s)://` URLs are auto-linked. Posts over ~700 chars collapse behind "Read more / Ler mais". |
+| `sourceUrl` | yes | Shared. Original source of the subject (changelog, official blog, docs). Rendered as the "Source / Fonte" link. |
+| `sourceLabel` | no | Plain string (same in both languages) or `{ en, pt }`. Defaults to the URL hostname. |
+| `tags` | no | Shared array. Each entry is a plain string (names that don't translate, e.g. `"Kubernetes"`) or `{ en, pt }`. |
+
+There is no per-post `lang` field or language badge anymore.
 
 Rule: the Posts area must never mention or link to LinkedIn or X/Twitter (no share buttons, no "originally posted on").
