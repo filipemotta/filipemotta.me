@@ -494,6 +494,37 @@ O gVisor adiciona um kernel em userspace por baixo, então o código gerado pelo
 https://opensource.googleblog.com/2026/11/sandboxing-untrusted-ai-agents-at-scale.html`,
     },
   },
+  {
+    slug: "github-actions-pull-request-target-block",
+    date: "2026-11-09",
+    title: {
+      en: "GitHub Actions blocks pull_request_target by default in public repos",
+      pt: "GitHub Actions bloqueia pull_request_target por padrão em repositórios públicos",
+    },
+    sourceUrl: "https://github.blog/changelog/2026-11-02-pull_request_target-blocked-by-default-december-2/",
+    sourceLabel: "GitHub Changelog",
+    tags: ["GitHub Actions", "CI/CD", { en: "Security", pt: "Segurança" }],
+    text: {
+      en: `Between 1 pm and 3 pm Brasília time today (4 to 6 pm UTC), GitHub switches on the pull_request_target block for public repositories as a dress rehearsal. Workflows on that trigger fail with an error annotation and never start a job. The permanent default lands on December 2.
+
+The catch is that a brownout only catches what happens inside it. The trigger fires on pull request events, so a repo where nobody opens or pushes to a PR in those two hours sails through looking healthy. A quiet afternoon proves nothing. The real list is in Actions Insights, which already shows what the rule would block because it has been running in evaluate mode.
+
+Most hits will be the boring automation everyone forgot. Labelers, greetings for first-time contributors, bots that post test results back on fork PRs. Moving them to pull_request is the advice you will read everywhere, but on a fork PR that trigger gets no secrets and a read-only GITHUB_TOKEN, so the bot that comments simply stops commenting. For those, an event policy that allows that one workflow file is the honest fix.
+
+Private and internal repos and GitHub Enterprise Server are left out of this change. The trigger keeps working there, with the same risk it always had.
+
+https://github.blog/changelog/2026-11-02-pull_request_target-blocked-by-default-december-2/`,
+      pt: `Hoje, entre 13h e 15h no horário de Brasília (16h às 18h UTC), o GitHub liga o bloqueio do pull_request_target em repositórios públicos como um ensaio geral. Workflows com esse trigger falham com uma anotação de erro e nenhum job chega a começar. O bloqueio definitivo, por padrão, entra em 2 de dezembro.
+
+O problema é que um brownout só pega o que acontece dentro dele. O trigger dispara em eventos de pull request, então um repositório em que ninguém abre ou faz push em um PR nessas duas horas passa ileso, com cara de saudável. Uma tarde tranquila não prova nada. A lista de verdade está no Actions Insights, que já mostra o que a regra bloquearia, porque ela vem rodando em modo de avaliação.
+
+A maioria dos casos vai ser aquela automação chata que todo mundo esqueceu. Labelers, mensagens de boas-vindas para quem contribui pela primeira vez, bots que publicam resultados de teste em PRs de fork. Migrar para pull_request é o conselho que você vai ler em todo lugar, mas em PR de fork esse trigger não recebe secrets e ganha um GITHUB_TOKEN somente leitura, então o bot que comenta simplesmente para de comentar. Nesses casos, uma event policy que libere aquele arquivo de workflow específico é a correção honesta.
+
+Repositórios privados e internos e o GitHub Enterprise Server ficam fora dessa mudança. Lá o trigger continua funcionando, com o mesmo risco de sempre.
+
+https://github.blog/changelog/2026-11-02-pull_request_target-blocked-by-default-december-2/`,
+    },
+  },
 ];
 
 export default posts;
