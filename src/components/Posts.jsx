@@ -1,14 +1,57 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { colors } from "../styles/theme";
 import FadeIn from "./FadeIn";
+import Pagination from "./Pagination";
 import { useLanguage } from "../i18n/LanguageContext";
 import posts from "../data/posts";
 
 const COLLAPSE_THRESHOLD = 700; // characters
 const URL_RE = /(https?:\/\/[^\s]+)/g;
 const LOCALES = { en: "en-US", pt: "pt-BR" };
+const HOME_PAGE_SIZE = 3;
 
 export const sortedPosts = [...posts].sort((a, b) => b.date.localeCompare(a.date));
+
+export const postPath = (slug) => `/posts/${slug}`;
+
+const OTHER_LANG = { en: "pt", pt: "en" };
+
+/**
+ * Resolves a localized value ({ en, pt } or a plain string) for `lang`, falling
+ * back to the other language. Returns [value, languageActuallyUsed].
+ */
+function pick(value, lang) {
+  if (value == null || typeof value === "string") return [value, lang];
+  if (value[lang]) return [value[lang], lang];
+  const other = OTHER_LANG[lang] || "en";
+  return [value[other], other];
+}
+
+/**
+ * Flattens a bilingual post for the given site language. `titleLang` and
+ * `textLang` say which language was actually used (differs on fallback), for
+ * the `lang` attribute.
+ */
+export function localizePost(post, lang) {
+  const [title, titleLang] = pick(post.title, lang);
+  const [text, textLang] = pick(post.text, lang);
+  return {
+    ...post,
+    title,
+    titleLang,
+    text,
+    textLang,
+    sourceLabel: pick(post.sourceLabel, lang)[0],
+    tags: post.tags?.map((tag) => pick(tag, lang)[0]),
+  };
+}
+
+/** Plain-text excerpt for meta descriptions. */
+export function excerpt(text, max = 160) {
+  const flat = text.replace(/https?:\/\/\S+/g, "").replace(/\s+/g, " ").trim();
+  return flat.length > max ? `${flat.slice(0, max - 1).trimEnd()}…` : flat;
+}
 
 function formatDate(iso, lang) {
   const [y, m, d] = iso.split("-").map(Number);
@@ -65,8 +108,14 @@ function PostText({ text }) {
   ));
 }
 
-function PostCard({ post, lang, t }) {
-  const collapsible = post.text.length > COLLAPSE_THRESHOLD;
+/**
+ * A post card. `full` renders the permalink-page variant: no collapsing and the
+ * title as the page's h1 instead of a link.
+ */
+export function PostCard({ post: rawPost, full = false }) {
+  const { lang, t } = useLanguage();
+  const post = localizePost(rawPost, lang);
+  const collapsible = !full && post.text.length > COLLAPSE_THRESHOLD;
   const [expanded, setExpanded] = useState(false);
   const collapsed = collapsible && !expanded;
 
@@ -78,22 +127,25 @@ function PostCard({ post, lang, t }) {
       <div className="absolute -inset-1 bg-gradient-to-r from-sky-500/5 to-blue-500/5 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
       <div className="relative z-10">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="mb-4">
           <time dateTime={post.date} className="font-mono text-xs text-white/40">
             {formatDate(post.date, lang)}
           </time>
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] uppercase font-semibold tracking-wider text-white/60 bg-white/5 border border-white/10">
-            {post.lang}
-          </span>
         </div>
 
-        <h3 className="text-2xl font-medium tracking-tight text-white mb-5" lang={post.lang}>
-          <a href={`#post-${post.slug}`} className="hover:text-sky-300 transition-colors">
+        {full ? (
+          <h1 className="text-3xl md:text-4xl font-medium tracking-tight text-white mb-6" lang={post.titleLang}>
             {post.title}
-          </a>
-        </h3>
+          </h1>
+        ) : (
+          <h3 className="text-2xl font-medium tracking-tight text-white mb-5" lang={post.titleLang}>
+            <Link to={postPath(post.slug)} className="hover:text-sky-300 transition-colors">
+              {post.title}
+            </Link>
+          </h3>
+        )}
 
-        <div className="relative" lang={post.lang}>
+        <div className="relative" lang={post.textLang}>
           <div className={collapsed ? "max-h-64 overflow-hidden" : ""}>
             <PostText text={post.text} />
           </div>
@@ -125,7 +177,7 @@ function PostCard({ post, lang, t }) {
           </div>
         )}
 
-        <div className="mt-6 pt-5 border-t border-white/5 flex items-center gap-2 text-sm">
+        <div className="mt-6 pt-5 border-t border-white/5 flex flex-wrap items-center gap-x-2 gap-y-3 text-sm">
           <span className="text-white/40">{t("posts.source")}:</span>
           <a
             href={post.sourceUrl}
@@ -146,16 +198,39 @@ function PostCard({ post, lang, t }) {
               <path d="M7 17L17 7M17 7H7M17 7v10" />
             </svg>
           </a>
+          {!full && (
+            <Link
+              to={postPath(post.slug)}
+              className="ml-auto text-white/50 hover:text-white font-medium transition-colors"
+            >
+              {t("posts.permalink")} →
+            </Link>
+          )}
         </div>
       </div>
     </article>
   );
 }
 
+/** Home page section: newest posts, 3 per page, paginated in place. */
 export default function Posts() {
-  const { lang, t } = useLanguage();
+  const { t } = useLanguage();
+  const [page, setPage] = useState(1);
+  const listRef = useRef(null);
 
   if (sortedPosts.length === 0) return null;
+
+  const totalPages = Math.ceil(sortedPosts.length / HOME_PAGE_SIZE);
+  const visible = sortedPosts.slice((page - 1) * HOME_PAGE_SIZE, page * HOME_PAGE_SIZE);
+
+  // Changing page swaps cards of different heights; keep the list's top in view
+  // instead of leaving the reader stranded (or jumping to the top of the site).
+  const changePage = (p) => {
+    setPage(p);
+    requestAnimationFrame(() => {
+      listRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
 
   return (
     <section id="posts" className="py-24 border-t border-white/5">
@@ -169,11 +244,24 @@ export default function Posts() {
           </h2>
         </FadeIn>
 
-        {sortedPosts.map((post, i) => (
-          <FadeIn key={post.slug} delay={150 + Math.min(i, 3) * 100}>
-            <PostCard post={post} lang={lang} t={t} />
-          </FadeIn>
-        ))}
+        <div ref={listRef} className="scroll-mt-24">
+          {visible.map((post, i) => (
+            <FadeIn key={post.slug} delay={Math.min(i, 3) * 100}>
+              <PostCard post={post} />
+            </FadeIn>
+          ))}
+        </div>
+
+        <Pagination page={page} totalPages={totalPages} onChange={changePage} />
+
+        <div className="mt-10 text-center">
+          <Link
+            to="/posts"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-sky-300 border border-sky-500/40 bg-sky-500/10 hover:bg-sky-500/20 hover:text-white transition-colors"
+          >
+            {t("posts.seeAll")} ({sortedPosts.length}) →
+          </Link>
+        </div>
       </div>
     </section>
   );

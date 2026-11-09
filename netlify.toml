@@ -8,3 +8,15 @@
 
 [functions."ebook-leads-digest"]
   schedule = "0 10 * * *"
+
+# SPA fallback for the client-side /posts routes only. Not forced, so real
+# files (assets, /istio/) still win; nothing outside /posts is rewritten.
+[[redirects]]
+  from = "/posts"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/posts/*"
+  to = "/index.html"
+  status = 200
