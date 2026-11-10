@@ -28,6 +28,29 @@
  */
 const posts = [
   {
+    slug: "aws-nitro-sandboxes-eks",
+    date: "2026-11-10",
+    title: {
+      en: "AWS Nitro Sandboxes: each EKS pod in its own VM",
+      pt: "AWS Nitro Sandboxes: cada pod do EKS em sua própria VM",
+    },
+    sourceUrl: "https://aws.amazon.com/about-aws/whats-new/2026/11/nitro-sandboxes-eks-ecs-ec2/",
+    sourceLabel: { en: "AWS What's New", pt: "Novidades da AWS" },
+    tags: ["AWS", "EKS", "Kubernetes", { en: "Security", pt: "Segurança" }],
+    text: {
+      en: `I spent years running VMware and the hypervisor was rarely the part that worried me. Isolation between VMs just held. What went wrong was usually the wiring around them, like a port group shared by the wrong machines or a service account with far more rights than it needed.
+
+AWS Nitro Sandboxes, announced yesterday, bring that kind of boundary to EKS. Set runtimeClassName to isolated-sandbox and the pod boots in its own lightweight VM on the Nitro Hypervisor with its own kernel, while Pod Identity, VPC CNI, EBS and kubectl exec keep working. It needs Kubernetes 1.36 or later and there is no extra charge. https://aws.amazon.com/about-aws/whats-new/2026/11/nitro-sandboxes-eks-ecs-ec2/
+
+The detail I would point a platform team at sits in AWS's own coding-agent example. The VM stops a kernel escape. What the agent can reach is still a hostname egress policy, enforced only after the VPC CNI ConfigMap turns on the network policy controller. github.com stays reachable as a whole, so the scoped GitHub token is what actually limits what gets pushed. Twenty years in and it is the same story. The box holds and the wiring is where it leaks.`,
+      pt: `Passei anos operando VMware e o hypervisor raramente era a parte que me preocupava. O isolamento entre VMs simplesmente segurava. O que dava errado costumava ser a fiação em volta delas, como um port group compartilhado pelas máquinas erradas ou uma service account com muito mais permissões do que precisava.
+
+O AWS Nitro Sandboxes, anunciado ontem, traz esse tipo de fronteira para o EKS. Basta definir runtimeClassName como isolated-sandbox e o pod sobe na sua própria VM leve no Nitro Hypervisor, com kernel próprio, enquanto Pod Identity, VPC CNI, EBS e kubectl exec continuam funcionando. Exige Kubernetes 1.36 ou superior e não tem custo extra. https://aws.amazon.com/about-aws/whats-new/2026/11/nitro-sandboxes-eks-ecs-ec2/
+
+O detalhe para o qual eu chamaria a atenção de um time de plataforma está no próprio exemplo de agente de código da AWS. A VM impede um escape de kernel. O que o agente consegue alcançar continua sendo uma política de egress por hostname, aplicada só depois que o ConfigMap do VPC CNI liga o network policy controller. O github.com continua acessível por inteiro, então é o token do GitHub com escopo restrito que de fato limita o que pode ser enviado. Vinte anos depois, a história é a mesma. A caixa segura, e é na fiação que vaza.`,
+    },
+  },
+  {
     slug: "kubevirt-cncf-graduated",
     date: "2026-11-07",
     title: {
