@@ -28,6 +28,25 @@
  */
 const posts = [
   {
+    slug: "eks-auto-mode-karpenter-dra",
+    date: "2026-11-11",
+    title: {
+      en: "DRA for NVIDIA GPUs and EFA in EKS Auto Mode and Karpenter",
+      pt: "DRA para GPUs NVIDIA e EFA no EKS Auto Mode e no Karpenter",
+    },
+    sourceUrl: "https://aws.amazon.com/about-aws/whats-new/2026/11/amazon-eks-auto-mode-karpenter-dra/",
+    sourceLabel: { en: "AWS What's New", pt: "Novidades da AWS" },
+    tags: ["AWS", "EKS", "Karpenter", "GPU", "Kubernetes"],
+    text: {
+      en: `If you split GPUs into smaller slices with NVIDIA MIG (Multi-Instance GPU) today, the Dynamic Resource Allocation support that EKS Auto Mode and Karpenter got this week is not your migration yet. Dynamic Resource Allocation, or DRA, is the newer Kubernetes way to ask for devices like GPUs through a claim instead of a fixed count on the node. The announcement says pods can share GPU devices, but in Auto Mode that means several pods pointing at the same claim and getting the same whole GPU, because time-slicing and MIG through DRA are not available there.
+
+The other line worth reading twice is that each node stays a DRA node or an old-style device plugin node for its whole lifetime, so moving a GPU workload over is a node rotation you plan for and not a flag you flip on a Friday. Claims that keep GPUs and EFA (Elastic Fabric Adapter, the AWS low-latency network for training) on the same hardware topology, on Kubernetes 1.36, are still a real step for training clusters. https://docs.aws.amazon.com/eks/latest/userguide/auto-change.html`,
+      pt: `Se hoje você divide GPUs em fatias menores com NVIDIA MIG (Multi-Instance GPU), o suporte a Dynamic Resource Allocation que o EKS Auto Mode e o Karpenter ganharam esta semana ainda não é a sua migração. Dynamic Resource Allocation, ou DRA, é a forma mais nova do Kubernetes de pedir dispositivos como GPUs por meio de um claim, em vez de uma contagem fixa no node. O anúncio diz que pods podem compartilhar GPUs, mas no Auto Mode isso significa vários pods apontando para o mesmo claim e recebendo a mesma GPU inteira, porque time-slicing e MIG via DRA não estão disponíveis lá.
+
+A outra linha que vale ler duas vezes é que cada node continua sendo um node DRA ou um node com o device plugin antigo durante toda a sua vida útil. Então migrar uma carga de GPU é uma rotação de nodes que você planeja, e não uma flag que você liga numa sexta-feira. Claims que mantêm GPUs e EFA (Elastic Fabric Adapter, a rede de baixa latência da AWS para treinamento) na mesma topologia de hardware, no Kubernetes 1.36, ainda são um passo real para clusters de treinamento. https://docs.aws.amazon.com/eks/latest/userguide/auto-change.html`,
+    },
+  },
+  {
     slug: "aws-nitro-sandboxes-eks",
     date: "2026-11-10",
     title: {
