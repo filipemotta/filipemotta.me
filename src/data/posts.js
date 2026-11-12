@@ -28,6 +28,21 @@
  */
 const posts = [
   {
+    slug: "aws-emulator-never-denies",
+    date: "2026-11-12",
+    title: {
+      en: "AWS Emulator never says AccessDenied",
+      pt: "O AWS Emulator nunca diz AccessDenied",
+    },
+    sourceUrl: "https://aws.amazon.com/about-aws/whats-new/2026/11/aws-emulator-now-available/",
+    sourceLabel: { en: "AWS What's New", pt: "Novidades da AWS" },
+    tags: ["AWS", "IAM", "Security", "Testing", "AI Agents"],
+    text: {
+      en: `AWS shipped AWS Emulator yesterday, a local copy of AWS that answers your SDK and CLI calls in milliseconds with no account behind it. I can already picture coding agents looping against it until every test is green. The sentence I would read twice is on its own security page https://docs.aws.amazon.com/emulator/latest/userguide/security.html where it says the emulator never denies a request signed with its own key. It also doesn't evaluate S3 bucket policies or KMS key policies, so an agent can spend a whole afternoon in there without ever meeting an AccessDenied. In my experience the first deploy of a new service rarely breaks on logic. It breaks on who is allowed to do what. A green run against the emulator tells you the code works and nothing about whether production will let it run.`,
+      pt: `A AWS lançou ontem o AWS Emulator, uma cópia local da AWS que responde às suas chamadas de SDK e CLI em milissegundos, sem nenhuma conta por trás. Já consigo imaginar agentes de código rodando em loop contra ele até todos os testes ficarem verdes. A frase que eu leria duas vezes está na própria página de segurança dele https://docs.aws.amazon.com/emulator/latest/userguide/security.html, onde diz que o emulador nunca nega uma requisição assinada com a chave dele. Ele também não avalia bucket policies do S3 nem key policies do KMS, então um agente pode passar a tarde inteira lá dentro sem nunca encontrar um AccessDenied. Na minha experiência, o primeiro deploy de um serviço novo raramente quebra na lógica. Ele quebra em quem tem permissão para fazer o quê. Uma execução verde contra o emulador diz que o código funciona e não diz nada sobre se a produção vai deixar ele rodar.`,
+    },
+  },
+  {
     slug: "eks-auto-mode-karpenter-dra",
     date: "2026-11-11",
     title: {
