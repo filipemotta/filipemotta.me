@@ -28,6 +28,29 @@
  */
 const posts = [
   {
+    slug: "istio-ambient-multicluster-failover",
+    date: "2026-11-14",
+    title: {
+      en: "Istio ambient multi-network failover and the one-pod problem",
+      pt: "Failover multi-network no Istio ambient e o problema de um pod só",
+    },
+    sourceUrl: "https://istio.io/latest/docs/ambient/install/multicluster/",
+    sourceLabel: { en: "Istio Docs", pt: "Documentação do Istio" },
+    tags: ["Istio", "Kubernetes", "Service Mesh", "Multicluster"],
+    text: {
+      en: `A failover drill can pass on a quiet afternoon and still be the wrong test. That is the line I took from the known limitations section of the Istio ambient multicluster install page, now that multi-network mode is generally available (announced at KubeCon this week). When traffic fails over to a remote network, a single endpoint there may take a disproportionate share of the requests because of HTTP multiplexing and connection pooling.
+
+So a real regional outage can land almost entirely on one pod while the service average still looks healthy. Anyone who ran storage multipathing for years knows the feeling, because a path being up and load actually spreading across it were never the same thing. The per-pod graphs under production-shaped traffic are where that shows up. The service dashboard is where it hides. https://istio.io/latest/docs/ambient/install/multicluster/
+
+If you are still getting comfortable with the mesh itself, I wrote a free hands-on ebook on Istio that starts from the basics. https://filipemotta.me/istio`,
+      pt: `Um teste de failover pode passar numa tarde tranquila e ainda assim ser o teste errado. Essa foi a frase que tirei da seção de known limitations da página de instalação multicluster do Istio ambient, agora que o modo multi-network está em disponibilidade geral (anunciado na KubeCon desta semana). Quando o tráfego faz failover para uma rede remota, um único endpoint lá pode receber uma fatia desproporcional das requisições por causa do multiplexing HTTP e do connection pooling.
+
+Ou seja, uma queda regional de verdade pode cair quase inteira em um pod só, enquanto a média do serviço continua parecendo saudável. Quem trabalhou anos com multipathing de storage conhece essa sensação, porque um caminho estar ativo e a carga realmente se distribuir por ele nunca foram a mesma coisa. Os gráficos por pod, com tráfego no formato de produção, são onde isso aparece. O dashboard do serviço é onde isso se esconde. https://istio.io/latest/docs/ambient/install/multicluster/
+
+Se você ainda está se familiarizando com o service mesh em si, escrevi um ebook prático e gratuito sobre Istio que começa do básico. https://filipemotta.me/istio`,
+    },
+  },
+  {
     slug: "aws-emulator-never-denies",
     date: "2026-11-12",
     title: {
