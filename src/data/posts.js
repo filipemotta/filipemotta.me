@@ -605,6 +605,33 @@ Repositórios privados e internos e o GitHub Enterprise Server ficam fora dessa 
 https://github.blog/changelog/2026-11-02-pull_request_target-blocked-by-default-december-2/`,
     },
   },
+  {
+    slug: "mcp-server-git-config-command-execution",
+    date: "2026-11-16",
+    title: {
+      en: "mcp-server-git ran the repository's own commands inside its read-only tools",
+      pt: "O mcp-server-git executava comandos do próprio repositório nas ferramentas de leitura",
+    },
+    sourceUrl: "https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-6hqx-gqrx-c5r2",
+    sourceLabel: { en: "GitHub Security Advisory", pt: "Alerta de segurança no GitHub" },
+    tags: ["MCP", "Git", "AI Agents", { en: "Security", pt: "Segurança" }],
+    text: {
+      en: `AI agents increasingly work on code through MCP (Model Context Protocol), a standard that lets a model call external tools. One of the most common is a Git server that lets the agent check status, read diffs and browse history. Those read tools usually run without asking anyone, because looking at a repository sounds harmless. The official reference implementation of that server just fixed a flaw that shows why the assumption is weak. https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-6hqx-gqrx-c5r2
+
+Git is not purely passive. When git status runs, it executes whatever program the repository's .git/config names in core.fsmonitor. A git diff does the same with diff.external. So mcp-server-git was running commands chosen by the repository itself inside its read-only tools, with the server's environment and credentials, no approval prompt and outside the sandbox that limits the model. Version 2026.11.11 fixes it by forcing safe values through GIT_CONFIG_COUNT, which takes priority over any config file Git reads.
+
+The part that matters day to day is where that poisoned config comes from. A normal git clone does not copy the remote's .git/config, so a fresh clone is safe. A zipped project, a restored backup, a CI artifact or a folder copied from another machine keeps its .git directory intact. Those are exactly the folders agents get pointed at.
+
+This is the question I keep coming back to in the DevOps AI Guide. Whether an agent can write Terraform matters less than what you let it execute and behind which safeguard. A fail-closed hook, the kind chapter 13 builds, sees the agent call git_status and lets it through as a read. What Git runs underneath never reaches the hook. So the trust decision has to cover the MCP server and the folders it is pointed at, not just the tool names. https://devops-ai.tech`,
+      pt: `Agentes de IA trabalham cada vez mais com código por meio do MCP (Model Context Protocol), um padrão que permite a um modelo chamar ferramentas externas. Uma das mais comuns é um servidor Git que deixa o agente ver o status, ler diffs e navegar pelo histórico. Essas ferramentas de leitura costumam rodar sem pedir aprovação a ninguém, porque olhar um repositório parece inofensivo. A implementação de referência oficial desse servidor acabou de corrigir uma falha que mostra por que essa suposição é frágil. https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-6hqx-gqrx-c5r2
+
+O Git não é puramente passivo. Quando o git status roda, ele executa qualquer programa que o .git/config do repositório indicar em core.fsmonitor. Um git diff faz o mesmo com diff.external. Ou seja, o mcp-server-git executava comandos escolhidos pelo próprio repositório dentro das suas ferramentas de leitura, com o ambiente e as credenciais do servidor, sem pedido de aprovação e fora do sandbox que limita o modelo. A versão 2026.11.11 corrige isso forçando valores seguros via GIT_CONFIG_COUNT, que tem prioridade sobre qualquer arquivo de configuração que o Git leia.
+
+O que importa no dia a dia é de onde vem essa configuração envenenada. Um git clone normal não copia o .git/config do remoto, então um clone novo é seguro. Já um projeto zipado, um backup restaurado, um artefato de CI ou uma pasta copiada de outra máquina mantém o diretório .git intacto. E são exatamente essas as pastas para onde os agentes são apontados.
+
+Essa é a pergunta à qual sempre volto no DevOps AI Guide. Se um agente consegue escrever Terraform importa menos do que aquilo que você deixa ele executar e atrás de qual proteção. Um hook fail-closed, do tipo que o capítulo 13 constrói, vê o agente chamar git_status e deixa passar como leitura. O que o Git executa por baixo nunca chega ao hook. Por isso a decisão de confiança tem que cobrir o servidor MCP e as pastas para onde ele aponta, não só os nomes das ferramentas. https://devops-ai.tech`,
+    },
+  },
 ];
 
 export default posts;
