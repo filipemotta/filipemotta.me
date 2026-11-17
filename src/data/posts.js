@@ -632,6 +632,25 @@ O que importa no dia a dia é de onde vem essa configuração envenenada. Um git
 Essa é a pergunta à qual sempre volto no DevOps AI Guide. Se um agente consegue escrever Terraform importa menos do que aquilo que você deixa ele executar e atrás de qual proteção. Um hook fail-closed, do tipo que o capítulo 13 constrói, vê o agente chamar git_status e deixa passar como leitura. O que o Git executa por baixo nunca chega ao hook. Por isso a decisão de confiança tem que cobrir o servidor MCP e as pastas para onde ele aponta, não só os nomes das ferramentas. https://devops-ai.tech`,
     },
   },
+  {
+    slug: "kube-proxy-ipvs-removal",
+    date: "2026-11-17",
+    title: {
+      en: "kube-proxy's IPVS backend is going away in Kubernetes 1.40",
+      pt: "O backend IPVS do kube-proxy sai no Kubernetes 1.40",
+    },
+    sourceUrl: "https://kubernetes.io/blog/2026/11/16/ipvs-removal/",
+    sourceLabel: { en: "Kubernetes Blog", pt: "Blog do Kubernetes" },
+    tags: ["Kubernetes", "kube-proxy", "nftables", { en: "Networking", pt: "Redes" }],
+    text: {
+      en: `Which kube-proxy mode are your clusters running? If the answer is ipvs, or nobody on the team is sure, this is a good week to find out. Kubernetes SIG Network has scheduled the removal of the IPVS (IP Virtual Server) backend for Kubernetes 1.40. It has been deprecated since 1.35 and the announcement explains why. https://kubernetes.io/blog/2026/11/16/ipvs-removal/
+
+The date is the least interesting part. A lot of teams picked IPVS years ago for scale and for its load balancing schedulers. The schedulers never delivered inside kube-proxy because every node balances on its own without sharing state, so even Maglev hashing ends up no better than random. IPVS mode also leans on iptables for many Service features, which means Red Hat's plan to remove the iptables API from RHEL (Red Hat Enterprise Linux) takes the IPVS path down with it. The recommended target is nftables, but only on Kubernetes 1.36 or later with kernel 5.13 or later, since the scaling fixes were not backported. For many clusters the migration starts with the node OS and the cluster version. The ConfigMap edit is the easy last line.`,
+      pt: `Qual modo do kube-proxy os seus clusters estão rodando? Se a resposta for ipvs, ou se ninguém no time tiver certeza, esta é uma boa semana para descobrir. O SIG Network do Kubernetes agendou a remoção do backend IPVS (IP Virtual Server) para o Kubernetes 1.40. Ele está deprecated desde a 1.35, e o anúncio explica por quê. https://kubernetes.io/blog/2026/11/16/ipvs-removal/
+
+A data é a parte menos interessante. Muitos times escolheram o IPVS anos atrás pela escala e pelos seus algoritmos de balanceamento de carga. Esses algoritmos nunca entregaram o prometido dentro do kube-proxy, porque cada node balanceia por conta própria, sem compartilhar estado, então até o hashing Maglev acaba não sendo melhor que aleatório. O modo IPVS também depende do iptables para muitos recursos de Service, o que significa que o plano da Red Hat de remover a API do iptables do RHEL (Red Hat Enterprise Linux) derruba o caminho do IPVS junto. O destino recomendado é o nftables, mas só no Kubernetes 1.36 ou superior com kernel 5.13 ou superior, já que as correções de escala não foram portadas para versões anteriores. Para muitos clusters, a migração começa pelo sistema operacional dos nodes e pela versão do cluster. A edição do ConfigMap é a última linha, e a mais fácil.`,
+    },
+  },
 ];
 
 export default posts;
