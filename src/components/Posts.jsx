@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { colors } from "../styles/theme";
 import FadeIn from "./FadeIn";
+import Rail from "./Rail";
 import Pagination from "./Pagination";
 import { useLanguage } from "../i18n/LanguageContext";
 import posts from "../data/posts";
@@ -84,7 +85,7 @@ function linkify(line, keyPrefix) {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sky-400 hover:text-sky-300 underline underline-offset-2 break-all"
+          className="text-accent hover:text-white underline underline-offset-2 break-all"
         >
           {url}
         </a>
@@ -122,10 +123,9 @@ export function PostCard({ post: rawPost, full = false }) {
   return (
     <article
       id={`post-${post.slug}`}
-      className="max-w-4xl mx-auto mb-8 glass-panel rounded-3xl p-8 md:p-10 relative overflow-hidden group hover:border-white/20 transition-all duration-500 scroll-mt-24"
+      className="max-w-4xl mx-auto mb-5 glass-panel rounded-[20px] p-6 md:p-9 relative overflow-hidden group hover:border-white/20 transition-all duration-500 scroll-mt-24"
     >
-      <div className="absolute -inset-1 bg-gradient-to-r from-sky-500/5 to-blue-500/5 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
+      
       <div className="relative z-10">
         <div className="mb-4">
           <time dateTime={post.date} className="font-mono text-xs text-white/40">
@@ -134,12 +134,12 @@ export function PostCard({ post: rawPost, full = false }) {
         </div>
 
         {full ? (
-          <h1 className="text-3xl md:text-4xl font-medium tracking-tight text-white mb-6" lang={post.titleLang}>
+          <h1 className="text-3xl md:text-4xl font-display font-bold tracking-tight text-white mb-6" lang={post.titleLang}>
             {post.title}
           </h1>
         ) : (
-          <h3 className="text-2xl font-medium tracking-tight text-white mb-5" lang={post.titleLang}>
-            <Link to={postPath(post.slug)} className="hover:text-sky-300 transition-colors">
+          <h3 className="text-2xl font-display font-bold tracking-tight text-white mb-5" lang={post.titleLang}>
+            <Link to={postPath(post.slug)} className="hover:text-white transition-colors">
               {post.title}
             </Link>
           </h3>
@@ -152,7 +152,7 @@ export function PostCard({ post: rawPost, full = false }) {
           {collapsed && (
             <div
               className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
-              style={{ background: `linear-gradient(to top, ${colors.dark}, transparent)` }}
+              style={{ background: `linear-gradient(to top, ${colors.darker}, transparent)` }}
             />
           )}
         </div>
@@ -161,7 +161,7 @@ export function PostCard({ post: rawPost, full = false }) {
           <button
             onClick={() => setExpanded((v) => !v)}
             aria-expanded={expanded}
-            className="mt-3 text-sm font-medium text-sky-400 hover:text-sky-300 bg-transparent border-none cursor-pointer p-0"
+            className="mt-3 text-sm font-medium text-accent hover:text-white bg-transparent border-none cursor-pointer p-0"
           >
             {expanded ? t("posts.readLess") : t("posts.readMore")}
           </button>
@@ -183,7 +183,7 @@ export function PostCard({ post: rawPost, full = false }) {
             href={post.sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group/src inline-flex items-center gap-1.5 text-sky-400 hover:text-sky-300 font-medium"
+            className="group/src inline-flex items-center gap-1.5 text-accent hover:text-white font-medium"
           >
             {post.sourceLabel || hostname(post.sourceUrl)}
             <svg
@@ -233,36 +233,22 @@ export default function Posts() {
   };
 
   return (
-    <section id="posts" className="py-24 border-t border-white/5">
-      <div className="max-w-6xl mx-auto px-6">
-        <FadeIn>
-          <p className="text-sky-500 font-mono text-xs tracking-widest uppercase mb-2 text-center">
-            {t("posts.label")}
-          </p>
-          <h2 className="text-3xl md:text-4xl font-medium tracking-tight mb-16 text-center text-white">
-            {t("posts.heading")}
-          </h2>
-        </FadeIn>
-
-        <div ref={listRef} className="scroll-mt-24">
-          {visible.map((post, i) => (
-            <FadeIn key={post.slug} delay={Math.min(i, 3) * 100}>
-              <PostCard post={post} />
-            </FadeIn>
-          ))}
-        </div>
-
-        <Pagination page={page} totalPages={totalPages} onChange={changePage} />
-
-        <div className="mt-10 text-center">
-          <Link
-            to="/posts"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-sky-300 border border-sky-500/40 bg-sky-500/10 hover:bg-sky-500/20 hover:text-white transition-colors"
-          >
-            {t("posts.seeAll")} ({sortedPosts.length}) →
-          </Link>
-        </div>
+    <Rail id="posts" title={t("posts.heading")} lead={t("sections.postsLead")}>
+      <div ref={listRef} className="scroll-mt-24">
+        {visible.map((post, i) => (
+          <FadeIn key={post.slug} delay={Math.min(i, 3) * 100}>
+            <PostCard post={post} />
+          </FadeIn>
+        ))}
       </div>
-    </section>
+
+      <Pagination page={page} totalPages={totalPages} onChange={changePage} />
+
+      <div className="mt-10">
+        <Link to="/posts" className="btn-ghost">
+          {t("posts.seeAll")} ({sortedPosts.length})
+        </Link>
+      </div>
+    </Rail>
   );
 }

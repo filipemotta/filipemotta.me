@@ -15,8 +15,8 @@ function pageItems(page, total) {
 
 const base =
   "min-w-9 h-9 px-3 inline-flex items-center justify-center rounded-lg text-sm font-medium border transition-colors no-underline";
-const idle = "text-white/60 border-white/10 bg-white/5 hover:text-white hover:border-sky-500/50 cursor-pointer";
-const current = "text-white border-sky-500/60 bg-sky-500/15";
+const idle = "text-white/60 border-white/10 bg-white/5 hover:text-white hover:border-accent/50 cursor-pointer";
+const current = "text-white border-accent/60 bg-accent/15";
 const disabled = "text-white/20 border-white/5 bg-transparent cursor-not-allowed";
 
 /**

@@ -6,11 +6,12 @@ export default function FadeIn({ children, delay = 0, className = "" }) {
   return (
     <div
       ref={ref}
-      className={className}
+      className={`motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!blur-0 ${className}`}
       style={{
         opacity: isVisible ? 1 : 0,
-        transform: isVisible ? "translateY(0)" : "translateY(20px)",
-        transition: `opacity 1s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 1s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+        transform: isVisible ? "none" : "translateY(18px)",
+        filter: isVisible ? "none" : "blur(6px)",
+        transition: `opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, filter 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
       }}
     >
       {children}

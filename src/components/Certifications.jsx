@@ -1,6 +1,4 @@
-import { colors } from "../styles/theme";
-import FadeIn from "./FadeIn";
-import CertBadge from "./CertBadge";
+import Rail from "./Rail";
 import certifications from "../data/certifications";
 import { useLanguage } from "../i18n/LanguageContext";
 
@@ -8,22 +6,18 @@ export default function Certifications() {
   const { t } = useLanguage();
 
   return (
-    <section id="certifications" className="py-24 border-t border-white/5 bg-neutral-950 relative">
-      <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto px-6 relative">
-        <FadeIn>
-          <h2 className="text-3xl md:text-4xl font-medium tracking-tight mb-16 text-center text-white">
-            {t("certifications.heading")}
-          </h2>
-        </FadeIn>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {certifications.map((c, i) => (
-            <CertBadge key={i} cert={c} index={i} />
-          ))}
-        </div>
-      </div>
-    </section>
+    <Rail id="certifications" title={t("certifications.heading")} lead={t("sections.certsLead")}>
+      <ul className="m-0 grid list-none gap-px overflow-hidden rounded-[20px] bg-white/[0.08] p-0 sm:grid-cols-2" style={{ boxShadow: "0 0 0 1px var(--hairline)" }}>
+        {certifications.map((c) => (
+          <li key={c.name} className="flex items-center gap-4 bg-surface p-5 transition-colors hover:bg-raised">
+            <img src={c.logo} alt="" width="24" height="24" loading="lazy" className="h-6 w-6 flex-shrink-0 object-contain" />
+            <div className="min-w-0">
+              <p className="m-0 text-sm font-medium leading-snug text-white">{c.name}</p>
+              <p className="m-0 mt-0.5 text-xs text-muted">{c.org}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </Rail>
   );
 }

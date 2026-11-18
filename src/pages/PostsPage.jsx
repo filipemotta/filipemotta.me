@@ -31,10 +31,10 @@ export default function PostsPage() {
             <Link to="/#posts" className="text-sm text-white/50 hover:text-white transition-colors">
               ← {t("posts.backHome")}
             </Link>
-            <p className="text-sky-500 font-mono text-xs tracking-widest uppercase mt-8 mb-2">
+            <p className="text-accent font-mono text-xs tracking-widest uppercase mt-8 mb-2">
               {t("posts.label")}
             </p>
-            <h1 className="text-3xl md:text-4xl font-medium tracking-tight text-white">
+            <h1 className="text-3xl md:text-4xl font-display font-bold tracking-tight text-white">
               {t("posts.allTitle")}
             </h1>
             <p className="mt-3 text-white/50">{t("posts.allDescription")}</p>
