@@ -1,3 +1,5 @@
+import awsLogo from "../assets/aws.svg";
+
 const certifications = [
   {
     name: "CKS — Certified Kubernetes Security Specialist",
@@ -17,12 +19,12 @@ const certifications = [
   {
     name: "AWS Certified DevOps Engineer — Professional",
     org: "Amazon Web Services",
-    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg",
+    logo: awsLogo,
   },
   {
     name: "AWS Solutions Architect Associate",
     org: "Amazon Web Services",
-    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg",
+    logo: awsLogo,
   },
   {
     name: "GCP Professional Cloud DevOps Engineer",

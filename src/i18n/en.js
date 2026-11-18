@@ -2,20 +2,49 @@ const en = {
   nav: {
     links: [
       { label: "About", id: "about" },
-      { label: "Skills", id: "skills" },
       { label: "Books", id: "guide" },
       { label: "Posts", id: "posts" },
       { label: "Projects", id: "projects" },
       { label: "Certifications", id: "certifications" },
-      { label: "Contact", id: "contact" },
     ],
+    contact: "Get in touch",
   },
   hero: {
-    subtitle: "Senior DevOps, Cloud Architect & Engineer",
-    description:
-      "Building and scaling cloud-native infrastructure for over 20 years. Kubernetes specialist managing 300+ clusters across AWS, Azure, and GCP with a passion for automation, GitOps, and reliability.",
-    viewProjects: "View Projects",
-    getInTouch: "Get in Touch",
+    status: "Available for projects",
+    headline: "Kubernetes platforms that stay up while you change everything.",
+    sub: "I'm Filipe Motta, DevOps engineer and cloud architect. For over 20 years I've been building and running infrastructure on AWS, GCP and Azure.",
+    primary: "Get in touch",
+    secondary: "Read the Istio ebook",
+    rows: [
+      { name: "experience", status: "Ready", value: "20+ years" },
+      { name: "k8s-clusters", status: "Running", value: "300+ on AWS" },
+      { name: "certifications", status: "Valid", value: "10, with CKA, CKAD and CKS" },
+      { name: "clouds", status: "Ready", value: "AWS, GCP, Azure" },
+    ],
+  },
+  profile: {
+    heading: "Who's behind this",
+    role: "Senior DevOps Engineer, Cloud Architect and Author",
+    bio: [
+      "DevOps engineer and cloud architect with over 20 years of career, from traditional Linux administration to cloud-native platforms. Today I design and run infrastructure at scale, including more than 300 Kubernetes clusters on AWS.",
+      "I've led multi-cloud migrations between AWS, Azure and GCP, a fintech's move from a monolith to microservices, and the adoption of GitOps, service mesh with Istio and autoscaling with Karpenter and KEDA.",
+      "I hold 10 certifications, among them the Kubernetes trilogy (CKA, CKAD and CKS), AWS DevOps Professional and GCP Professional Cloud DevOps Engineer. I'm the author of the ebook Istio, Hands-On and of The Official DevOps with AI Guide.",
+    ],
+    more: "Read more",
+    less: "Read less",
+    stats: [
+      { label: "experience", value: 20, suffix: "+", detail: "Years in infrastructure" },
+      { label: "clusters", value: 300, suffix: "+", detail: "Kubernetes on AWS" },
+      { label: "certifications", value: 10, suffix: "", detail: "Kubernetes, AWS, GCP, Terraform" },
+    ],
+  },
+  sections: {
+    guideLead: "Free material, written from what runs in production and proved in a lab.",
+    postsLead: "Short notes on what changes in Kubernetes, cloud and security, always with the source.",
+    projectsLead: "Work that sums up the kind of problem I solve.",
+    stackHeading: "What I work with",
+    certsLead: "Ten active certifications across Kubernetes, AWS, GCP, Terraform and Linux.",
+    topics: "What's inside",
   },
   about: {
     label: "About Me",
@@ -72,7 +101,7 @@ const en = {
   },
   posts: {
     label: "Posts",
-    heading: "Notes on Cloud & Platform",
+    heading: "Notes on Cloud & Platform Engineering & DevOps",
     readMore: "Read more",
     readLess: "Show less",
     source: "Source",
@@ -91,13 +120,10 @@ const en = {
     notFoundText: "This post doesn’t exist or was moved. Browse all posts instead.",
   },
   contact: {
-    label: "Let\u2019s Connect",
-    heading: "Ready to build something",
-    headingAccent: " amazing",
-    description:
-      "Whether you need a Kubernetes expert, cloud migration specialist, or DevOps architect, I\u2019m here to help your infrastructure scale with confidence.",
-    whatsapp: "WhatsApp Me",
-    linkedin: "LinkedIn Profile",
+    heading: "Need help with Kubernetes, a cloud migration or DevOps architecture?",
+    description: "Tell me the scenario. I answer on WhatsApp or LinkedIn.",
+    whatsapp: "Message on WhatsApp",
+    linkedin: "Open LinkedIn",
   },
   footer: {
     tagline: "Built with passion for infrastructure",

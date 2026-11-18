@@ -1,49 +1,30 @@
-import { colors } from "../styles/theme";
+import Rail from "./Rail";
 import FadeIn from "./FadeIn";
-import SkillBar from "./SkillBar";
 import { useLanguage } from "../i18n/LanguageContext";
 import { getSkillGroups } from "../data/skills";
 
 export default function Skills() {
   const { lang, t } = useLanguage();
-  const skillGroups = getSkillGroups(lang);
+  const groups = getSkillGroups(lang);
 
   return (
-    <section id="skills" className="py-24 border-t border-white/5 relative">
-      {/* Grid background */}
-      <div className="absolute inset-0 grid-bg opacity-50 pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto px-6 relative">
-        <FadeIn>
-          <p className="text-sky-500 font-mono text-xs tracking-widest uppercase mb-2 text-center">
-            {t("skills.label")}
-          </p>
-          <h2 className="text-3xl md:text-4xl font-medium tracking-tight mb-16 text-center text-white">
-            {t("skills.heading")}
-          </h2>
-        </FadeIn>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {skillGroups.map((group, gi) => (
-            <FadeIn key={group.title} delay={gi * 150}>
-              <div className="glass-panel p-8 rounded-3xl group hover:border-white/20 transition-all duration-500">
-                <h3 className="text-lg font-medium tracking-tight text-white mb-6">
-                  <span className="mr-2">{group.icon}</span>
-                  {group.title}
-                </h3>
-                {group.skills.map((s, si) => (
-                  <SkillBar
-                    key={s.name}
-                    name={s.name}
-                    level={s.level}
-                    delay={si * 100}
-                  />
-                ))}
-              </div>
-            </FadeIn>
-          ))}
-        </div>
+    <Rail id="skills" title={t("sections.stackHeading")}>
+      <div className="grid gap-x-10 gap-y-10 sm:grid-cols-2">
+        {groups.map((group, gi) => (
+          <FadeIn key={group.title} delay={gi * 80}>
+            <h3 className="m-0 border-b border-white/[0.08] pb-3 font-display text-lg font-bold tracking-tight text-white">
+              {group.title}
+            </h3>
+            <ul className="m-0 mt-3 list-none p-0">
+              {group.skills.map((s) => (
+                <li key={s.name} className="py-1.5 text-[15px] text-white/65">
+                  {s.name}
+                </li>
+              ))}
+            </ul>
+          </FadeIn>
+        ))}
       </div>
-    </section>
+    </Rail>
   );
 }

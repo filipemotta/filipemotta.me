@@ -2,20 +2,49 @@ const pt = {
   nav: {
     links: [
       { label: "Sobre", id: "about" },
-      { label: "Skills", id: "skills" },
       { label: "Livros", id: "guide" },
       { label: "Posts", id: "posts" },
       { label: "Projetos", id: "projects" },
       { label: "Certificações", id: "certifications" },
-      { label: "Contato", id: "contact" },
     ],
+    contact: "Falar comigo",
   },
   hero: {
-    subtitle: "Senior DevOps, Cloud Architect & Engineer",
-    description:
-      "Construindo e escalando infraestrutura cloud-native há mais de 20 anos. Especialista em Kubernetes gerenciando 300+ clusters em AWS, Azure e GCP com paixão por automação, GitOps e confiabilidade.",
-    viewProjects: "Ver Projetos",
-    getInTouch: "Entre em Contato",
+    status: "Disponível para projetos",
+    headline: "Plataformas Kubernetes que seguem no ar enquanto você muda tudo.",
+    sub: "Sou Filipe Motta, engenheiro DevOps e arquiteto cloud. Há mais de 20 anos construo e opero infraestrutura em AWS, GCP e Azure.",
+    primary: "Falar comigo",
+    secondary: "Ler o ebook de Istio",
+    rows: [
+      { name: "experiencia", status: "Ready", value: "20+ anos" },
+      { name: "clusters-k8s", status: "Running", value: "300+ na AWS" },
+      { name: "certificacoes", status: "Valid", value: "10, com CKA, CKAD e CKS" },
+      { name: "clouds", status: "Ready", value: "AWS, GCP, Azure" },
+    ],
+  },
+  profile: {
+    heading: "Quem está por trás",
+    role: "Engenheiro DevOps Sênior, Arquiteto Cloud e Autor",
+    bio: [
+      "Engenheiro DevOps e arquiteto cloud com mais de 20 anos de carreira, da administração Linux tradicional às plataformas cloud-native. Hoje projeto e opero infraestrutura em escala, incluindo mais de 300 clusters Kubernetes na AWS.",
+      "Conduzi migrações multi-cloud entre AWS, Azure e GCP, a saída de um monolito para microsserviços em uma fintech e a adoção de GitOps, service mesh com Istio e autoscaling com Karpenter e KEDA.",
+      "Tenho 10 certificações, entre elas a trilogia de Kubernetes (CKA, CKAD e CKS), AWS DevOps Professional e GCP Professional Cloud DevOps Engineer. Sou autor do ebook Istio, Hands-On e do Guia Oficial DevOps com IA.",
+    ],
+    more: "Ver mais",
+    less: "Ver menos",
+    stats: [
+      { label: "experiência", value: 20, suffix: "+", detail: "Anos em infraestrutura" },
+      { label: "clusters", value: 300, suffix: "+", detail: "Kubernetes na AWS" },
+      { label: "certificações", value: 10, suffix: "", detail: "Kubernetes, AWS, GCP, Terraform" },
+    ],
+  },
+  sections: {
+    guideLead: "Material gratuito, escrito a partir do que roda em produção e provado em laboratório.",
+    postsLead: "Notas curtas sobre o que muda em Kubernetes, cloud e segurança, sempre com a fonte.",
+    projectsLead: "Trabalhos que resumem o tipo de problema que eu resolvo.",
+    stackHeading: "Com o que eu trabalho",
+    certsLead: "Dez certificações ativas em Kubernetes, AWS, GCP, Terraform e Linux.",
+    topics: "O que você encontra",
   },
   about: {
     label: "Sobre Mim",
@@ -72,7 +101,7 @@ const pt = {
   },
   posts: {
     label: "Posts",
-    heading: "Notas sobre Cloud & Plataforma",
+    heading: "Notas sobre Cloud & Engenharia de Plataforma & DevOps",
     readMore: "Ler mais",
     readLess: "Mostrar menos",
     source: "Fonte",
@@ -91,13 +120,10 @@ const pt = {
     notFoundText: "Este post não existe ou foi movido. Veja todos os posts.",
   },
   contact: {
-    label: "Vamos Conversar",
-    heading: "Pronto para construir algo",
-    headingAccent: " incrível",
-    description:
-      "Seja para Kubernetes, migração cloud ou arquitetura DevOps, estou aqui para ajudar sua infraestrutura a escalar com confiança.",
-    whatsapp: "WhatsApp",
-    linkedin: "Perfil LinkedIn",
+    heading: "Precisa de ajuda com Kubernetes, migração cloud ou arquitetura DevOps?",
+    description: "Me conte o cenário. Respondo por WhatsApp ou LinkedIn.",
+    whatsapp: "Chamar no WhatsApp",
+    linkedin: "Abrir o LinkedIn",
   },
   footer: {
     tagline: "Feito com paixão por infraestrutura",

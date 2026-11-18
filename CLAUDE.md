@@ -17,22 +17,22 @@ No test framework or linter is configured.
 
 Single-page React 18 portfolio site using Vite + Tailwind CSS. No router — the page is a vertical scroll of sections.
 
-**App.jsx** composes all sections in order: Nav → Hero → About → Skills → Experience → Certifications → Contact → Footer. The `useActiveSection` hook provides scroll-spy for nav highlighting.
+**App.jsx** composes the home sections in order: Nav → Hero → Marquee → Profile → Publications → Posts → Experience → Skills → Certifications → Contact → Footer. The `useActiveSection` hook provides scroll-spy for nav highlighting.
 
 ### Key layers
 
-- **`src/styles/theme.js`** — Single source of truth for design tokens (colors, fonts). All components import from here rather than hardcoding values. The teal accent (`#3FBDB6`) and dark background (`#0F1419`) define the visual identity.
-- **`src/data/`** — Content is separated from presentation. `jobs.js`, `certifications.js`, `skills.js`, and `highlights.js` export arrays/objects consumed by section components. Edit these files to update portfolio content.
+- **`src/styles/theme.js`** — Single source of truth for design tokens (colors, fonts). Mirrored as Tailwind colors/fonts in `tailwind.config.js` (`ink`, `surface`, `raised`, `accent`, `signal`, `muted`; `font-display`, `font-sans`, `font-mono`). The blue accent (`#2E9BFF`), the teal signal (`#5EE0CF`) and the near-black background (`#06080C`) define the visual identity.
+- **`src/data/`** — Content is separated from presentation. `jobs.js`, `certifications.js`, `skills.js`, `publications.js` and `posts.js` export arrays/objects consumed by section components. Edit these files to update portfolio content.
 - **`src/hooks/`** — `useInView.js` (IntersectionObserver wrapper for scroll-triggered animations) and `useActiveSection.js` (scroll-spy for Nav).
-- **`src/components/`** — Section components (Hero, About, Skills, etc.) and reusable primitives (FadeIn, Counter, Particles, SkillBar, TerminalText, CertBadge, TimelineItem).
+- **`src/components/`** — Section components (Hero, Profile, Publications, etc.) and reusable primitives (Rail: section with the heading in a left rail; FadeIn; Counter; Marquee; Pagination).
 
 ### Styling approach
 
-Tailwind utility classes for layout/spacing, inline styles referencing `theme.js` tokens for colors and fonts. No CSS modules or styled-components.
+Tailwind utility classes, plus a few shared component classes in `src/index.css` (`container-site`, `section-y`, `text-display-xl/lg/md`, `stat-label`, `surface-card`, `btn-primary`, `btn-ghost`) and the entrance/marquee keyframes, all of which respect `prefers-reduced-motion`. No CSS modules or styled-components.
 
 ### Fonts
 
-Google Fonts (Plus Jakarta Sans, JetBrains Mono) loaded via a `<link>` tag in App.jsx, URL defined in `theme.js`.
+Google Fonts (Bricolage Grotesque for display, IBM Plex Sans, IBM Plex Mono) loaded via a `<link>` tag in App.jsx, URL defined in `theme.js`.
 
 ## Adding a post
 

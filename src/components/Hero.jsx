@@ -1,111 +1,93 @@
-import { colors, fonts } from "../styles/theme";
-import FadeIn from "./FadeIn";
-import Counter from "./Counter";
-import Particles from "./Particles";
 import { useLanguage } from "../i18n/LanguageContext";
-import { getHighlights } from "../data/highlights";
+
+const STATUS_COLOR = { Ready: "text-signal", Running: "text-accent", Valid: "text-signal" };
+
+/** The numbers, read the way this trade reads them: as `kubectl get` output. */
+function StatusPanel({ rows }) {
+  return (
+    <div className="enter surface-card overflow-hidden font-mono text-[13px]" style={{ animationDelay: "700ms" }}>
+      <div className="flex items-center gap-2 border-b border-white/[0.08] px-4 py-3 text-muted">
+        <span className="text-signal">$</span>
+        <span className="text-white/90">kubectl get filipe -o wide</span>
+      </div>
+      <div className="overflow-x-auto px-4 py-4">
+        <table className="w-full min-w-[20rem] border-separate border-spacing-y-1.5 text-left">
+          <thead>
+            <tr className="text-[11px] tracking-[0.08em] text-muted">
+              <th className="pr-4 font-medium">NAME</th>
+              <th className="pr-4 font-medium">STATUS</th>
+              <th className="font-medium">VALUE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, i) => (
+              <tr key={row.name} className="row-in" style={{ animationDelay: `${1100 + i * 220}ms` }}>
+                <td className="whitespace-nowrap pr-4 text-white/70">{row.name}</td>
+                <td className={`whitespace-nowrap pr-4 ${STATUS_COLOR[row.status] || "text-signal"}`}>{row.status}</td>
+                <td className="text-white">{row.value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="row-in mt-3 text-muted" style={{ animationDelay: `${1100 + rows.length * 220}ms` }}>
+          <span className="text-signal">$</span> <span className="caret" aria-hidden="true" />
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default function Hero() {
   const { lang, t } = useLanguage();
-  const highlights = getHighlights(lang);
+  const words = t("hero.headline").split(" ");
+  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <section
-      id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16"
-    >
-      <Particles />
-
-      {/* Gradient orbs — subtle */}
+    <section id="hero" className="relative overflow-hidden pt-16">
+      <div className="grid-bg pointer-events-none absolute inset-0" />
       <div
-        className="absolute w-[60%] h-[60%] rounded-full blur-[120px] opacity-[0.08] pointer-events-none"
-        style={{ background: colors.accent, top: "10%", right: "-10%" }}
-      />
-      <div
-        className="absolute w-72 h-72 rounded-full blur-[100px] opacity-[0.05] pointer-events-none"
-        style={{ background: "#8b5cf6", bottom: "20%", left: "5%" }}
+        className="pointer-events-none absolute -right-[10%] -top-[20%] h-[70%] w-[60%] rounded-full opacity-[0.16] blur-[140px]"
+        style={{ background: "#2E9BFF" }}
       />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 py-24 text-center">
-        {/* Badge */}
-        <FadeIn>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8 hover:border-sky-500/30 hover:bg-white/10 transition-colors cursor-pointer group shadow-[0_0_10px_-5px_rgba(255,255,255,0.1)]">
-            <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500" />
+      <div className="container-site relative grid items-end gap-12 pb-16 pt-16 md:pb-24 md:pt-24 lg:grid-cols-12">
+        <div className="lg:col-span-7">
+          <p className="enter mb-7 inline-flex items-center gap-2.5 text-sm text-muted">
+            <span className="relative flex h-2 w-2">
+              <span className="ping-ring absolute inline-flex h-full w-full rounded-full bg-signal" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-signal" />
             </span>
-            <span className="text-xs font-medium text-white tracking-wide">
-              Available for projects
-            </span>
-          </div>
-        </FadeIn>
-
-        <FadeIn delay={100}>
-          <h1 className="text-5xl sm:text-7xl lg:text-8xl font-semibold tracking-tighter leading-[1.05] max-w-5xl mx-auto mb-8 relative">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-sky-500/20 blur-[120px] -z-10 rounded-full pointer-events-none mix-blend-screen" />
-            <span className="text-gradient">Filipe</span>
-            <br className="hidden sm:block" />
-            <span className="text-gradient-accent drop-shadow-[0_0_35px_rgba(56,189,248,0.4)]">
-              Motta.
-            </span>
-          </h1>
-        </FadeIn>
-
-        <FadeIn delay={200}>
-          <p className="text-lg sm:text-xl text-neutral-300 font-light max-w-2xl mx-auto leading-relaxed mb-4">
-            {t("hero.subtitle")}
+            {t("hero.status")}
           </p>
-        </FadeIn>
 
-        <FadeIn delay={300}>
-          <p className="text-base text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-10">
-            {t("hero.description")}
-          </p>
-        </FadeIn>
-
-        <FadeIn delay={400}>
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-16">
-            {/* Primary button with glow */}
-            <button
-              onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
-              className="group sm:w-auto overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_-10px_rgba(14,165,233,0.6)] hover:scale-[1.02] w-full rounded-full p-[1px] relative"
-            >
-              <span className="absolute inset-0 bg-white/20 group-hover:bg-gradient-to-r group-hover:from-sky-500 group-hover:to-blue-500 transition-all duration-300" />
-              <span className="flex items-center justify-center gap-2 text-sm font-semibold text-white bg-black w-full h-full rounded-full py-3.5 px-8 relative backdrop-blur-3xl transition-all duration-300 group-hover:bg-black/90">
-                {t("hero.viewProjects")}
-                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="group-hover:translate-x-1 transition-transform">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
+          {/* key={lang} replays the rise when the language changes */}
+          <h1 key={lang} className="text-display-xl text-white" aria-label={t("hero.headline")}>
+            {words.map((word, i) => (
+              <span key={i} aria-hidden="true">
+                <span className="word">
+                  <span style={{ animationDelay: `${120 + i * 55}ms` }}>{word}</span>
+                </span>{" "}
               </span>
-            </button>
-
-            {/* Secondary glass button */}
-            <button
-              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-              className="group flex items-center justify-center gap-2 sm:w-auto text-sm font-medium text-white/80 bg-white/5 w-full rounded-full py-3.5 px-8 border border-white/10 backdrop-blur-xl transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:text-white cursor-pointer"
-            >
-              {t("hero.getInTouch")}
-            </button>
-          </div>
-        </FadeIn>
-
-        <FadeIn delay={600}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
-            {highlights.map((h, i) => (
-              <div
-                key={i}
-                className="glass-panel text-center p-5 rounded-2xl group hover:border-white/20 transition-all duration-300"
-              >
-                <div className="text-3xl font-bold text-white mb-1">
-                  <Counter end={h.value} suffix={h.suffix} />
-                </div>
-                <div className="text-xs text-white/40">
-                  {h.label}
-                </div>
-              </div>
             ))}
+          </h1>
+
+          <p className="enter mt-7 max-w-[52ch] text-lg leading-relaxed text-white/70" style={{ animationDelay: "500ms" }}>
+            {t("hero.sub")}
+          </p>
+
+          <div className="enter mt-9 flex flex-col gap-3 sm:flex-row" style={{ animationDelay: "620ms" }}>
+            <button onClick={() => scrollTo("contact")} className="btn-primary cursor-pointer border-none">
+              {t("hero.primary")}
+            </button>
+            <a href="/istio/" className="btn-ghost">
+              {t("hero.secondary")}
+            </a>
           </div>
-        </FadeIn>
+        </div>
+
+        <div className="lg:col-span-5">
+          <StatusPanel rows={t("hero.rows")} />
+        </div>
       </div>
     </section>
   );

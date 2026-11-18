@@ -4,7 +4,8 @@ import { colors, fonts } from "./styles/theme";
 import useActiveSection from "./hooks/useActiveSection";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
-import About from "./components/About";
+import Marquee from "./components/Marquee";
+import Profile from "./components/Profile";
 import Skills from "./components/Skills";
 import Publications from "./components/Publications";
 import Posts from "./components/Posts";
@@ -39,11 +40,12 @@ function Home() {
     <>
       <Nav active={activeSection} />
       <Hero />
-      <About />
-      <Skills />
+      <Marquee />
+      <Profile />
       <Publications />
       <Posts />
       <Experience />
+      <Skills />
       <Certifications />
       <Contact />
       <Footer />
