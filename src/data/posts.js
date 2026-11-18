@@ -651,6 +651,37 @@ The date is the least interesting part. A lot of teams picked IPVS years ago for
 A data é a parte menos interessante. Muitos times escolheram o IPVS anos atrás pela escala e pelos seus algoritmos de balanceamento de carga. Esses algoritmos nunca entregaram o prometido dentro do kube-proxy, porque cada node balanceia por conta própria, sem compartilhar estado, então até o hashing Maglev acaba não sendo melhor que aleatório. O modo IPVS também depende do iptables para muitos recursos de Service, o que significa que o plano da Red Hat de remover a API do iptables do RHEL (Red Hat Enterprise Linux) derruba o caminho do IPVS junto. O destino recomendado é o nftables, mas só no Kubernetes 1.36 ou superior com kernel 5.13 ou superior, já que as correções de escala não foram portadas para versões anteriores. Para muitos clusters, a migração começa pelo sistema operacional dos nodes e pela versão do cluster. A edição do ConfigMap é a última linha, e a mais fácil.`,
     },
   },
+  {
+    slug: "eks-auto-mode-resource-optimization-gitops",
+    date: "2026-11-18",
+    title: {
+      en: "EKS Auto Mode resource optimization and why GitOps sees no drift",
+      pt: "Resource optimization no EKS Auto Mode e por que o GitOps não vê drift",
+    },
+    sourceUrl: "https://docs.aws.amazon.com/eks/latest/userguide/auto-resource-optimization.html",
+    sourceLabel: { en: "Amazon EKS User Guide", pt: "Guia do usuário do Amazon EKS" },
+    tags: ["AWS", "EKS", "Kubernetes", "GitOps", "Argo CD"],
+    text: {
+      en: `Argo CD can report Synced and Healthy while every pod in a Deployment runs with CPU and memory requests that nobody wrote in Git. On EKS Auto Mode with the new resource optimization preview, that is expected behavior. It is by design.
+
+Resource optimization observes each container for about 12 hours and recommends requests based on real usage (Kubernetes 1.36 or later, Deployments and StatefulSets, no extra charge). In Recommend mode it only reports. In Apply mode it resizes running pods in place through the pod resize subresource, without recreating them. https://docs.aws.amazon.com/eks/latest/userguide/auto-resource-optimization.html
+
+Why GitOps stays quiet is worth understanding. Argo CD and Flux compare the objects you keep in Git with the same objects in the cluster. You keep the Deployment, and its pod template never changes. The pods themselves are not in Git, so their requests are never compared and self-heal has nothing to revert. New pods from a scale-out, a node consolidation or a rollout also start at the recommended size instead of the size in the template.
+
+So the YAML stops being the source of truth for capacity. When a service gets OOMKilled at 3 a.m., the requests in the pull request are not the ones the scheduler used. The real values live in a ResourceOptimization object in that namespace (kubectl get ro). The sizing band deserves a look before Apply too. Recommendations can range from half of the smallest request in the template up to twice the largest limit. A container with no limit has no upper bound at all.
+
+Turning it off is not a rollback either. Deleting the policy or switching back to Recommend only stops future changes, so running pods keep the last applied values until a rollout restart. I would still enable it, since overprovisioned requests are one of the most expensive habits in Kubernetes. I would just set limits first and make sure the on-call runbook starts with kubectl get ro.`,
+      pt: `O Argo CD pode mostrar Synced e Healthy enquanto todos os pods de um Deployment rodam com requests de CPU e memória que ninguém escreveu no Git. No EKS Auto Mode com o novo preview de resource optimization, esse é o comportamento esperado. É assim por design.
+
+O resource optimization observa cada container por cerca de 12 horas e recomenda requests com base no uso real (Kubernetes 1.36 ou superior, Deployments e StatefulSets, sem custo extra). No modo Recommend, ele só reporta. No modo Apply, ele redimensiona os pods em execução in place, pelo subresource de resize do pod, sem recriá-los. https://docs.aws.amazon.com/eks/latest/userguide/auto-resource-optimization.html
+
+Vale entender por que o GitOps fica em silêncio. O Argo CD e o Flux comparam os objetos que você mantém no Git com esses mesmos objetos no cluster. Você mantém o Deployment, e o pod template dele nunca muda. Os pods em si não estão no Git, então os requests deles nunca são comparados e o self-heal não tem nada para reverter. Pods novos, vindos de um scale-out, de uma consolidação de nodes ou de um rollout, também já sobem no tamanho recomendado, e não no tamanho do template.
+
+Ou seja, o YAML deixa de ser a fonte da verdade para capacidade. Quando um serviço toma OOMKilled às 3 da manhã, os requests do pull request não são os que o scheduler usou. Os valores reais ficam num objeto ResourceOptimization naquele namespace (kubectl get ro). A faixa de dimensionamento também merece uma olhada antes do Apply. As recomendações podem ir da metade do menor request do template até o dobro do maior limit. Um container sem limit não tem teto nenhum.
+
+Desligar também não é rollback. Apagar a policy ou voltar para Recommend só impede mudanças futuras, então os pods em execução mantêm os últimos valores aplicados até um rollout restart. Eu ainda assim ativaria, porque requests superdimensionados são um dos hábitos mais caros no Kubernetes. Só definiria os limits antes e garantiria que o runbook do plantão comece com kubectl get ro.`,
+    },
+  },
 ];
 
 export default posts;
