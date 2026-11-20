@@ -28,6 +28,33 @@
  */
 const posts = [
   {
+    slug: "vpc-flow-logs-eks-metadata-labels",
+    date: "2026-11-20",
+    title: {
+      en: "VPC Flow Logs now carry EKS metadata, and how labels get mapped",
+      pt: "VPC Flow Logs agora trazem metadados do EKS, e como os labels são mapeados",
+    },
+    sourceUrl: "https://aws.amazon.com/about-aws/whats-new/2026/11/amazon-vpc-flow-logs-amazon-eks-metadata/",
+    sourceLabel: { en: "AWS What's New", pt: "Novidades da AWS" },
+    tags: ["AWS", "EKS", "Kubernetes", "VPC", { en: "Observability", pt: "Observabilidade" }],
+    text: {
+      en: `Chasing a strange connection inside an EKS cluster used to mean detective work with IP addresses. The VPC flow log showed a pod IP talking to the database at 3 in the morning. By the time anyone looked, that address belonged to a different pod. I've chased that kind of ghost more than once. As of yesterday, VPC Flow Logs can write the EKS cluster, namespace, pod name, pod UID, node and labels into each record, at no extra charge beyond normal delivery and storage.
+
+The announcement says you don't need to change your cluster or applications, which is true. The flow log itself is another story. A flow log's record format can't be edited after creation and the default format has none of the new fields, so getting them means creating a new flow log with a custom format and retiring the old one, along with whatever Terraform module, Athena table or SIEM parser was built around the old column list. The fields are also filled only for pods on EC2 nodes that use the Amazon VPC CNI (Container Network Interface) plugin.
+
+What I find most interesting is how labels are mapped. Six well-known labels get their own columns, app plus five app.kubernetes.io keys such as name, instance and version. Every other label competes for four generic slots, eks-label-1 to eks-label-4, filled in alphabetical order by key after Kubernetes system labels like pod-template-hash are skipped. Take a Helm-installed pod labeled app.kubernetes.io/part-of, environment, helm.sh/chart, release and team. The team label sorts fifth and never reaches the record.
+
+It also means the same label can sit in eks-label-2 for one workload and eks-label-4 for another, so a query that looks for the owning team in a fixed column will quietly miss traffic. If ownership is what you want from these logs, the fix starts in your labeling convention, long before anyone writes the Athena query. https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html`,
+      pt: `Investigar uma conexão estranha dentro de um cluster EKS costumava ser trabalho de detetive com endereços IP. O VPC flow log mostrava o IP de um pod falando com o banco de dados às 3 da manhã. Quando alguém ia olhar, aquele endereço já pertencia a outro pod. Já persegui esse tipo de fantasma mais de uma vez. Desde ontem, o VPC Flow Logs pode gravar o cluster EKS, o namespace, o nome do pod, o UID do pod, o node e os labels em cada registro, sem custo extra além da entrega e do armazenamento normais.
+
+O anúncio diz que você não precisa mudar seu cluster nem suas aplicações, e é verdade. O flow log em si é outra história. O formato de registro de um flow log não pode ser editado depois de criado, e o formato padrão não tem nenhum dos campos novos. Para tê-los, é preciso criar um novo flow log com formato customizado e aposentar o antigo, junto com qualquer módulo Terraform, tabela do Athena ou parser de SIEM construído em cima da lista de colunas antiga. Os campos também só são preenchidos para pods em nodes EC2 que usam o plugin Amazon VPC CNI (Container Network Interface).
+
+O que acho mais interessante é como os labels são mapeados. Seis labels conhecidos ganham colunas próprias: app e mais cinco chaves app.kubernetes.io, como name, instance e version. Todos os outros labels disputam quatro slots genéricos, de eks-label-1 a eks-label-4, preenchidos em ordem alfabética pela chave, depois que labels de sistema do Kubernetes como pod-template-hash são ignorados. Pense num pod instalado via Helm com os labels app.kubernetes.io/part-of, environment, helm.sh/chart, release e team. O label team fica em quinto na ordenação e nunca chega ao registro.
+
+Isso também significa que o mesmo label pode cair em eks-label-2 num workload e em eks-label-4 em outro, então uma query que procura o time dono numa coluna fixa vai perder tráfego sem avisar. Se o que você quer desses logs é saber de quem é cada coisa, a correção começa na sua convenção de labels, bem antes de alguém escrever a query no Athena. https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html`,
+    },
+  },
+  {
     slug: "istio-ambient-multicluster-failover",
     date: "2026-11-14",
     title: {
