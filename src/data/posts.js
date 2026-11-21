@@ -28,6 +28,25 @@
  */
 const posts = [
   {
+    slug: "devops-agent-mcp-tool-defaults-read-only",
+    date: "2026-11-21",
+    title: {
+      en: "AWS DevOps Agent directed actions and the defaults nobody opens",
+      pt: "Directed actions no AWS DevOps Agent e os padrões que ninguém abre",
+    },
+    sourceUrl: "https://docs.aws.amazon.com/devopsagent/latest/userguide/configuring-integrations-and-knowledge-connecting-mcp-servers.html",
+    sourceLabel: { en: "AWS DevOps Agent User Guide", pt: "Guia do usuário do AWS DevOps Agent" },
+    tags: ["AWS", "DevOps Agent", "MCP", { en: "Security", pt: "Segurança" }],
+    text: {
+      en: `AWS DevOps Agent now takes directed actions from chat, in your team's chat app or in MCP (Model Context Protocol) clients such as coding agents, through MCP tools for code hosting, ticketing and on-call paging. The safety story is approval before anything that changes state. What decides "changes state" is a classification you set on each tool, read-only or mutating. The page on connecting MCP servers has the line worth reading twice. A tool registered programmatically without toolDetails defaults to read-only, so the agent runs it without asking anyone. If the registration lives in a script or a pipeline that someone wrote quickly, the merge or close-incident tool from that MCP server can sit on the no-approval side and nobody will notice until it is used.
+
+The new sandbox has the same split in a different place. AWS calls from the sandbox go through a proxy that only lets read-only operations through, which is a real guarantee. HTTP calls to the hosts you add to its allowlist follow whatever methods and paths you ticked, so a POST to your Git host's API added "just for the diagnostic scripts" quietly sits outside that guarantee. After years running VMware and enterprise storage, the permissions that hurt me were rarely the ones someone granted on purpose. They were the defaults nobody opened. https://docs.aws.amazon.com/devopsagent/latest/userguide/configuring-integrations-and-knowledge-connecting-mcp-servers.html`,
+      pt: `O AWS DevOps Agent agora executa directed actions a partir do chat, no app de chat do seu time ou em clientes MCP (Model Context Protocol) como agentes de código, por meio de tools MCP para hospedagem de código, ticketing e acionamento de plantão. A promessa de segurança é aprovação antes de qualquer coisa que mude estado. O que decide o que "muda estado" é uma classificação que você define em cada tool: read-only ou mutating. A página sobre conectar servidores MCP tem a linha que vale ler duas vezes. Uma tool registrada programaticamente sem toolDetails vira read-only por padrão, então o agente a executa sem pedir aprovação a ninguém. Se o registro mora num script ou num pipeline que alguém escreveu às pressas, a tool de merge ou de fechar incidente daquele servidor MCP pode ficar do lado sem aprovação, e ninguém vai perceber até ela ser usada.
+
+O novo sandbox tem a mesma divisão em outro lugar. As chamadas à AWS feitas do sandbox passam por um proxy que só deixa passar operações read-only, e essa é uma garantia de verdade. Já as chamadas HTTP para os hosts que você adiciona à allowlist seguem os métodos e paths que você marcou, então um POST para a API do seu Git host adicionado "só para os scripts de diagnóstico" fica, sem alarde, fora dessa garantia. Depois de anos operando VMware e storage corporativo, as permissões que me causaram problema raramente foram as concedidas de propósito. Foram os padrões que ninguém abriu. https://docs.aws.amazon.com/devopsagent/latest/userguide/configuring-integrations-and-knowledge-connecting-mcp-servers.html`,
+    },
+  },
+  {
     slug: "vpc-flow-logs-eks-metadata-labels",
     date: "2026-11-20",
     title: {
