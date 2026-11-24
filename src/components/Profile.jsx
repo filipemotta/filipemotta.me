@@ -4,6 +4,24 @@ import Counter from "./Counter";
 import profileImg from "../assets/profile.jpg";
 import { useLanguage } from "../i18n/LanguageContext";
 
+const COMPANY = "Uptime Soluções de TI";
+const COMPANY_URL = "https://uptimesolucoes.com.br";
+const linkClass =
+  "font-medium text-signal underline-offset-4 transition-colors hover:text-white hover:underline";
+
+function CompanyLink() {
+  return (
+    <a href={COMPANY_URL} target="_blank" rel="noopener noreferrer" className={linkClass}>
+      {COMPANY}
+    </a>
+  );
+}
+
+function withCompanyLink(text) {
+  const parts = text.split(COMPANY);
+  return parts.flatMap((part, i) => (i ? [<CompanyLink key={i} />, part] : [part]));
+}
+
 export default function Profile() {
   const { t } = useLanguage();
   const [open, setOpen] = useState(false);
@@ -36,14 +54,7 @@ export default function Profile() {
                 <p className="text-[15px] leading-snug text-muted md:text-base">{t("profile.role")}</p>
                 <p className="text-[15px] leading-snug text-muted md:text-base">
                   {t("profile.founder")}{" "}
-                  <a
-                    href="https://uptimesolucoes.com.br"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-medium text-signal underline-offset-4 transition-colors hover:text-white hover:underline"
-                  >
-                    Uptime Soluções de TI
-                  </a>
+                  <CompanyLink />
                 </p>
               </header>
 
@@ -56,7 +67,7 @@ export default function Profile() {
                 >
                   {bio.map((para, i) => (
                     <span key={i} className={`block ${i ? "mt-4" : ""}`}>
-                      {para}
+                      {withCompanyLink(para)}
                     </span>
                   ))}
                 </div>
