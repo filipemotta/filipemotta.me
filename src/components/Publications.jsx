@@ -50,7 +50,7 @@ export default function Publications() {
                   <a
                     href={pub.url}
                     {...(pub.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className={i === 0 ? "btn-primary" : "btn-ghost"}
+                    className="btn-primary"
                   >
                     {pub.linkLabel}
                   </a>

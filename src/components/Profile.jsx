@@ -34,6 +34,17 @@ export default function Profile() {
               <header className="flex flex-col gap-2.5">
                 <h3 className="text-display-lg text-white">Filipe Motta</h3>
                 <p className="text-[15px] leading-snug text-muted md:text-base">{t("profile.role")}</p>
+                <p className="text-[15px] leading-snug text-muted md:text-base">
+                  {t("profile.founder")}{" "}
+                  <a
+                    href="https://uptimesolucoes.com.br"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-signal underline-offset-4 transition-colors hover:text-white hover:underline"
+                  >
+                    Uptime Soluções de TI
+                  </a>
+                </p>
               </header>
 
               <div className="flex flex-col items-start gap-2">
