@@ -28,6 +28,29 @@
  */
 const posts = [
   {
+    slug: "shirudo-ebpf-shields-cilium-falco-conflict",
+    date: "2026-11-24",
+    title: {
+      en: "Shirudo's signed eBPF shields and the conflict with Cilium, Falco and bpftrace",
+      pt: "Os shields eBPF assinados do Shirudo e o conflito com Cilium, Falco e bpftrace",
+    },
+    sourceUrl: "https://docs.shirudo.dev/start/faq.html",
+    sourceLabel: { en: "Shirudo FAQ", pt: "FAQ do Shirudo" },
+    tags: ["eBPF", "Kubernetes", "Cilium", { en: "Security", pt: "Segurança" }],
+    text: {
+      en: `The gap between a fix existing and a fix running in production has paid for a lot of my overtime in twenty years of infrastructure work. OpenAI and Cisco open-sourced Shirudo yesterday to live inside that gap. An agent drafts a small eBPF program that refuses the vulnerable call, an operator approves it and the shield loads on the running host with no restart. Their demo blocked a Java4Shell exploit attempt against a live Elasticsearch process.
+
+What the announcement leaves out is in the docs. Shirudo owns BPF on the host. After shirudo init the kernel accepts BPF from userspace only through loaders signed with the operator's key. The FAQ says plainly that Cilium, Falco or bpftrace fail at their first map or program. On a Kubernetes node that is the CNI, the runtime detection and the debugging tools in one go. Every target also needs a TPM 2.0, with no mode without one, plus a kernel carrying patches from the shirudo build.
+
+That makes it a platform decision long before it is a security tool. Who on your team would hold the key that signs the CNI? https://docs.shirudo.dev/start/faq.html`,
+      pt: `A distância entre uma correção existir e uma correção rodar em produção já me custou muita hora extra em vinte anos de infraestrutura. A OpenAI e a Cisco abriram ontem o código do Shirudo para atuar justamente nesse intervalo. Um agente rascunha um pequeno programa eBPF que recusa a chamada vulnerável, um operador aprova, e o shield é carregado no host em execução, sem restart. A demo deles bloqueou uma tentativa de exploit Java4Shell contra um processo Elasticsearch em produção.
+
+O que o anúncio deixa de fora está na documentação. O Shirudo assume o controle do BPF no host. Depois do shirudo init, o kernel só aceita BPF vindo do userspace por meio de loaders assinados com a chave do operador. O FAQ diz com todas as letras que Cilium, Falco ou bpftrace falham no primeiro map ou programa. Num node Kubernetes, isso é o CNI, a detecção em runtime e as ferramentas de debug de uma vez só. Todo alvo também precisa de um TPM 2.0, sem nenhum modo que dispense isso, além de um kernel com patches do build do shirudo.
+
+Isso faz dele uma decisão de plataforma muito antes de ser uma ferramenta de segurança. Quem no seu time ficaria com a chave que assina o CNI? https://docs.shirudo.dev/start/faq.html`,
+    },
+  },
+  {
     slug: "devops-agent-mcp-tool-defaults-read-only",
     date: "2026-11-21",
     title: {
