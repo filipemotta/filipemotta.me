@@ -25,8 +25,9 @@ const en = {
   profile: {
     heading: "Who's behind this",
     role: "Senior DevOps Engineer, Cloud Architect and Author",
+    founder: "Founder of",
     bio: [
-      "DevOps engineer and cloud architect with over 20 years of career, from traditional Linux administration to cloud-native platforms. Today I design and run infrastructure at scale, including more than 300 Kubernetes clusters on AWS.",
+      "DevOps engineer and cloud architect with over 20 years of career, from traditional Linux administration to cloud-native platforms. Today I design and run infrastructure at scale, including more than 300 Kubernetes clusters on AWS. I'm also the founder of Uptime Soluções de TI.",
       "I've led multi-cloud migrations between AWS, Azure and GCP, a fintech's move from a monolith to microservices, and the adoption of GitOps, service mesh with Istio and autoscaling with Karpenter and KEDA.",
       "I hold 10 certifications, among them the Kubernetes trilogy (CKA, CKAD and CKS), AWS DevOps Professional and GCP Professional Cloud DevOps Engineer. I'm the author of the ebook Istio, Hands-On and of The Official DevOps with AI Guide.",
     ],
