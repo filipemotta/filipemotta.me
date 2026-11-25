@@ -28,6 +28,25 @@
  */
 const posts = [
   {
+    slug: "skills-over-mcp-public-beta",
+    date: "2026-11-25",
+    title: {
+      en: "MCP turns two: Skills over MCP in public beta",
+      pt: "MCP faz dois anos: Skills over MCP em beta público",
+    },
+    sourceUrl: "https://blog.modelcontextprotocol.io/posts/mcp-turns-two/",
+    sourceLabel: { en: "MCP Blog", pt: "Blog do MCP" },
+    tags: ["MCP", "AI", "Claude"],
+    text: {
+      en: `MCP turned two this week and the anniversary brought Skills over MCP, now in public beta in Claude (https://blog.modelcontextprotocol.io/posts/mcp-turns-two/).
+
+Until now a skill lived as a file you installed next to the agent. With this beta an MCP server can ship skills alongside its tools, as playbooks the agent loads only when a task needs them. The server that exposes your Terraform or Kubernetes tools can also carry the runbook for using them well. When it changes there is nothing separate to update on each laptop.`,
+      pt: `O MCP fez dois anos esta semana, e o aniversário trouxe o Skills over MCP, agora em beta público no Claude (https://blog.modelcontextprotocol.io/posts/mcp-turns-two/).
+
+Até agora, uma skill era um arquivo que você instalava ao lado do agente. Com esse beta, um servidor MCP pode distribuir skills junto com suas tools, como playbooks que o agente carrega só quando uma tarefa precisa deles. O servidor que expõe suas tools de Terraform ou Kubernetes também pode levar o runbook de como usá-las bem. Quando ele muda, não há nada separado para atualizar em cada laptop.`,
+    },
+  },
+  {
     slug: "shirudo-ebpf-shields-cilium-falco-conflict",
     date: "2026-11-24",
     title: {
