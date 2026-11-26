@@ -28,6 +28,37 @@
  */
 const posts = [
   {
+    slug: "aws-elb-for-envoy-ga-versioning-rate-limit",
+    date: "2026-11-26",
+    title: {
+      en: "AWS ELB for Envoy GA: coupled versioning and Global rate limits",
+      pt: "AWS ELB for Envoy em GA: versionamento acoplado e limites no rate limit Global",
+    },
+    sourceUrl: "https://aws.amazon.com/about-aws/whats-new/2026/11/elastic-load-balancing-for-envoy-generally-available/",
+    sourceLabel: { en: "AWS What's New", pt: "AWS What's New" },
+    tags: ["AWS", "Envoy", "Kubernetes", { en: "Networking", pt: "Redes" }],
+    text: {
+      en: `The Envoy version your new AWS-managed proxy runs is decided by the controller release you installed. You don't pick it.
+
+That line is in the compatibility page of the provider that connects Envoy Gateway to ELB for Envoy, which AWS made generally available yesterday. AWS runs the proxies on dedicated Nitro instances and patches Envoy and the OS for you. The Envoy minor comes from the Envoy Gateway release the controller was built against. The docs also say a proxy keeps the version it was created with even after you upgrade the controller.
+
+So the upgrade story changes shape. Envoy Gateway and the controller now move together, one row of a version matrix at a time. A newer Envoy Gateway than the matrix lists is simply unsupported, which means the old habit of bumping the Envoy Gateway chart whenever a release comes out stops being safe.
+
+Global rate limiting is the other surprise. Envoy Gateway points the proxy at a rate limit service whose DNS name only resolves inside the cluster, so a Global policy is either ignored or fails every request on its routes depending on failClosed. Local limits still work, counted per proxy instance.
+
+Handing over the patching is an easy yes. The version matrix becomes the page your upgrade runbook starts from. https://aws.amazon.com/about-aws/whats-new/2026/11/elastic-load-balancing-for-envoy-generally-available/`,
+      pt: `A versão do Envoy que o seu novo proxy gerenciado pela AWS roda é decidida pela release do controller que você instalou. Você não escolhe.
+
+Essa frase está na página de compatibilidade do provider que conecta o Envoy Gateway ao ELB for Envoy, que a AWS liberou em disponibilidade geral ontem. A AWS roda os proxies em instâncias Nitro dedicadas e aplica patches no Envoy e no sistema operacional para você. A minor do Envoy vem da release do Envoy Gateway contra a qual o controller foi compilado. A documentação também diz que um proxy mantém a versão com que foi criado mesmo depois de você atualizar o controller.
+
+Com isso, a estratégia de upgrade muda de forma. O Envoy Gateway e o controller passam a andar juntos, uma linha da matriz de versões por vez. Um Envoy Gateway mais novo do que o listado na matriz simplesmente não é suportado, o que significa que o velho hábito de atualizar o chart do Envoy Gateway sempre que sai uma release deixa de ser seguro.
+
+O global rate limiting é a outra surpresa. O Envoy Gateway aponta o proxy para um serviço de rate limit cujo nome DNS só resolve dentro do cluster, então uma política Global ou é ignorada ou faz falhar todas as requisições nas rotas dela, dependendo do failClosed. Limites locais continuam funcionando, contabilizados por instância de proxy.
+
+Entregar o patching é um sim fácil. A matriz de versões vira a página por onde o seu runbook de upgrade começa. https://aws.amazon.com/about-aws/whats-new/2026/11/elastic-load-balancing-for-envoy-generally-available/`,
+    },
+  },
+  {
     slug: "skills-over-mcp-public-beta",
     date: "2026-11-25",
     title: {
