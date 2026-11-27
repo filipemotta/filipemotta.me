@@ -28,6 +28,33 @@
  */
 const posts = [
   {
+    slug: "1password-incident-github-actions-environment-secrets",
+    date: "2026-11-27",
+    title: {
+      en: "1Password incident and protecting deploy secrets in GitHub Actions",
+      pt: "Incidente da 1Password e como proteger secrets de deploy no GitHub Actions",
+    },
+    sourceUrl: "https://1password.com/blog/update-on-nov-2026-security-incident",
+    sourceLabel: { en: "1Password Blog", pt: "Blog da 1Password" },
+    tags: ["GitHub Actions", "CI/CD", { en: "Security", pt: "Segurança" }, "DevSecOps"],
+    text: {
+      en: `Every time I review a pipeline I ask who can read the deploy secrets. The answer is almost always a longer list than the people who can approve a release.
+
+1Password's incident update this week is a good reason to ask again. An attacker took over one employee's corporate GitHub account, pushed malicious code to backend services and also reached the CI/CD system, which holds infrastructure secrets. Vaults were not touched and the root cause analysis is still weeks away, so I won't guess how it happened. https://1password.com/blog/update-on-nov-2026-security-incident
+
+What I keep coming back to is one sentence in GitHub's own Actions hardening guide. "Any user with write access to your repository has read access to all secrets configured in your repository." In most orgs that puts a developer's token one workflow file away from every repository secret, because a new branch with a new workflow runs before anyone reviews it.
+
+Environment secrets with required reviewers already ship with GitHub. A job can't read them until someone approves. Move the deploy credentials there and a stolen token becomes a pending approval in somebody's inbox. Repository secrets should hold nothing you'd mind seeing in an attacker's log.`,
+      pt: `Toda vez que reviso um pipeline, eu pergunto quem consegue ler os deploy secrets. A resposta quase sempre é uma lista bem maior do que a de quem pode aprovar uma release.
+
+A atualização da 1Password sobre o incidente desta semana é um bom motivo para fazer essa pergunta de novo. Um atacante assumiu a conta corporativa do GitHub de um funcionário, enviou código malicioso para serviços de backend e também alcançou o sistema de CI/CD, que guarda secrets de infraestrutura. Os vaults não foram afetados e a análise de causa raiz ainda deve levar semanas, então não vou especular como aconteceu. https://1password.com/blog/update-on-nov-2026-security-incident
+
+O que não sai da minha cabeça é uma frase do próprio guia de hardening do GitHub Actions: "Any user with write access to your repository has read access to all secrets configured in your repository." Na maioria das empresas, isso coloca o token de um desenvolvedor a um arquivo de workflow de distância de todos os repository secrets, porque uma branch nova com um workflow novo roda antes de qualquer pessoa revisar.
+
+Environment secrets com required reviewers já vêm prontos no GitHub. Um job não consegue lê-los até alguém aprovar. Mova as credenciais de deploy para lá e um token roubado vira uma aprovação pendente na caixa de entrada de alguém. Repository secrets não deveriam guardar nada que você se importaria de ver no log de um atacante.`,
+    },
+  },
+  {
     slug: "aws-elb-for-envoy-ga-versioning-rate-limit",
     date: "2026-11-26",
     title: {
