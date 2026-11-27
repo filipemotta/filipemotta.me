@@ -123,6 +123,22 @@ has("vap", b.vap, "operator: In");
 has("vap", b.vap, 'values: ["payments"]');
 has("vap", b.vap, "variables.isBatch");
 check("vap: CEL parens balanced (all rules)", (b.vap.match(/\(/g) || []).length === (b.vap.match(/\)/g) || []).length);
+has("gatekeeper covers ephemeral containers", b.gatekeeper, "pod_spec.ephemeralContainers[_]");
+has("gatekeeper resources skip ephemeral", b.gatekeeper, "c := sized_containers[_]");
+has("vap covers ephemeral containers", b.vap, "variables.podSpec.ephemeralContainers");
+has("vap matches ephemeral subresource", b.vap, '"pods/ephemeralcontainers"');
+has("vap resources skip ephemeral", b.vap, "variables.sizedContainers.all(c, has(c.resources)");
+check("vap sizedContainers defined before containers", b.vap.indexOf("name: sizedContainers") < b.vap.indexOf("name: containers"));
+has("kyverno tag check only looks at the last segment", b.kyverno, "regex_match('(@sha256:[a-f0-9]{64}|:[^/:@]+)$', element.image)");
+lacks("kyverno no naive *:* tag pattern", b.kyverno, '"*:*"');
+{
+  const re = /(@sha256:[a-f0-9]{64}|:[^/:@]+)$/;
+  const d = "a".repeat(64);
+  check("tag regex: registry:5000/app rejected", !re.test("registry:5000/app"));
+  check("tag regex: app:1.2 accepted", re.test("registry:5000/app:1.2"));
+  check("tag regex: digest accepted", re.test(`nginx@sha256:${d}`));
+  check("tag regex: untagged rejected", !re.test("nginx"));
+}
 check("rego: braces balanced (all rules)", (b.gatekeeper.match(/\{/g) || []).length === (b.gatekeeper.match(/\}/g) || []).length);
 
 /* -------- 3. changing inputs changes the output -------- */

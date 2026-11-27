@@ -318,10 +318,16 @@ function kyvernoRules(cfg) {
         ["pattern:", "  spec:", indent(containersPattern([`image: ${alt}`]), 4)].join("\n")
       );
     }
+    // Only the last path segment may carry the tag, so "registry:5000/app" (no tag) is rejected.
     r("require-image-tag", "An image tag or digest is required (untagged images resolve to :latest).", [
-      "pattern:",
-      "  spec:",
-      indent(containersPattern(['image: "*:*"']), 4),
+      "foreach:",
+      "  - list: request.object.spec.[ephemeralContainers, initContainers, containers][]",
+      "    deny:",
+      "      conditions:",
+      "        all:",
+      "          - key: \"{{ regex_match('(@sha256:[a-f0-9]{64}|:[^/:@]+)$', element.image) }}\"",
+      "            operator: Equals",
+      "            value: false",
     ].join("\n"));
     r("disallow-latest-tag", "The :latest tag is not allowed. Pin a version or a digest.", [
       "pattern:",
@@ -466,6 +472,20 @@ containers[c] {
 
 containers[c] {
   c := pod_spec.initContainers[_]
+}
+
+# Ephemeral containers (kubectl debug) get the same securityContext / image checks.
+containers[c] {
+  c := pod_spec.ephemeralContainers[_]
+}
+
+# Ephemeral containers cannot set resources, so resource checks use this set.
+sized_containers[c] {
+  c := pod_spec.containers[_]
+}
+
+sized_containers[c] {
+  c := pod_spec.initContainers[_]
 }`;
 
 const GK_TEMPLATES = {
@@ -513,7 +533,7 @@ violation[{"msg": msg}] {
     constraint: "require-requests-and-limits",
     rego: `# Requires resources.requests and resources.limits for both cpu and memory.
 violation[{"msg": msg}] {
-  c := containers[_]
+  c := sized_containers[_]
   kind := ["requests", "limits"][_]
   resource := ["cpu", "memory"][_]
   not c.resources[kind][resource]
@@ -668,6 +688,7 @@ export function gatekeeperYaml(input) {
     `enforcementAction: ${cfg.enforcement === "enforce" ? "deny" : "dryrun"} (use "warn" to surface violations to kubectl without blocking).`,
     "Apply the ConstraintTemplates first and wait for their CRDs before applying the Constraints.",
     "Rego inspects Pod specs and pod templates (Deployments, StatefulSets, DaemonSets, Jobs, CronJobs).",
+    "Ephemeral containers are checked too; make sure the Gatekeeper webhook also intercepts pods/ephemeralcontainers.",
     ...(cfg.rules.restrictImages && !cfg.allowedRegistries.length ? ["No allowed registries configured: only the :latest / untagged checks are active."] : []),
   ]);
   return `${head}\n---\n${ids.flatMap((id) => gatekeeperDocs(id, cfg)).join("\n---\n")}\n`;
@@ -707,7 +728,7 @@ function vapValidations(cfg) {
   }
   if (cfg.rules.requireResources) {
     add(
-      `${C}has(c.resources) && has(c.resources.requests) && has(c.resources.limits) && 'cpu' in c.resources.requests && 'memory' in c.resources.requests && 'cpu' in c.resources.limits && 'memory' in c.resources.limits)`,
+      `variables.sizedContainers.all(c, has(c.resources) && has(c.resources.requests) && has(c.resources.limits) && 'cpu' in c.resources.requests && 'memory' in c.resources.requests && 'cpu' in c.resources.limits && 'memory' in c.resources.limits)`,
       "Every container must set CPU and memory resources.requests and resources.limits."
     );
   }
@@ -759,9 +780,18 @@ export function vapYaml(input) {
     "        object.spec.template.spec",
     "    - name: containers",
     "      expression: >-",
-    "        variables.podSpec.containers +",
-    "        (has(variables.podSpec.initContainers) ? variables.podSpec.initContainers : [])",
+    "        variables.sizedContainers +",
+    "        (has(variables.podSpec.ephemeralContainers) ? variables.podSpec.ephemeralContainers : [])",
   ];
+  // Ephemeral containers cannot set resources; resource checks use containers + initContainers only.
+  variables.splice(
+    5,
+    0,
+    "    - name: sizedContainers",
+    "      expression: >-",
+    "        variables.podSpec.containers +",
+    "        (has(variables.podSpec.initContainers) ? variables.podSpec.initContainers : [])"
+  );
   if (cfg.rules.requireProbes) {
     variables.push(
       "    - name: isBatch",
@@ -785,7 +815,7 @@ export function vapYaml(input) {
     "  failurePolicy: Fail",
     "  matchConstraints:",
     "    resourceRules:",
-    rr("", ["pods"]),
+    rr("", ["pods", "pods/ephemeralcontainers"]),
     rr("apps", ["deployments", "statefulsets", "daemonsets"]),
     rr("batch", ["jobs", "cronjobs"]),
     "  variables:",
