@@ -151,6 +151,33 @@ check("GKE overlap detected", calculateGcp({ ...gcpInput, podBase: "10.0.0.0" })
 // Code generation smoke checks
 check("Karpenter YAML has NodePool", karpenterYaml(small, { clusterName: "demo", spotRatioPct: 50 }).includes("kind: NodePool"), true);
 check("Karpenter spot-only", karpenterYaml(small, { clusterName: "demo", spotRatioPct: 100 }).includes('values: ["spot"]'), true);
+
+// Karpenter instance families
+const ky = (families) => karpenterYaml(small, { clusterName: "demo", spotRatioPct: 50, families });
+const multi = ky(["m6i", "c6i", "r6i"]);
+check("multi-family: has instance-family", multi.includes("key: karpenter.k8s.aws/instance-family"), true);
+check("multi-family: lists families sorted", multi.includes('values: ["c6i", "m6i", "r6i"]'), true);
+check("multi-family: no instance-type pin", multi.includes("node.kubernetes.io/instance-type"), false);
+check("multi-family: no generation", multi.includes("instance-generation"), false);
+check("multi-family: size = xlarge", multi.includes('key: karpenter.k8s.aws/instance-size\n          operator: In\n          values: ["xlarge"]'), true);
+check("multi-family: NodePool name general", multi.includes("name: general\n"), true);
+const one = ky(["m6i"]);
+check("single family: instance-family m6i", one.includes('key: karpenter.k8s.aws/instance-family\n          operator: In\n          values: ["m6i"]'), true);
+check("single family: size xlarge", one.includes('values: ["xlarge"]'), true);
+check("single family: generation 6", one.includes('key: karpenter.k8s.aws/instance-generation\n          operator: In\n          values: ["6"]'), true);
+check("single family: NodePool name general-m6i", one.includes("name: general-m6i"), true);
+check("default (no families) = reference family", ky(undefined).includes('values: ["m6i"]'), true);
+check("empty families falls back to reference", ky([]).includes('values: ["m6i"]'), true);
+const mixed = ky(["m7g", "m6i"]);
+check("mixed arch: both arches", mixed.includes('key: kubernetes.io/arch\n          operator: In\n          values: ["amd64", "arm64"]'), true);
+check("mixed arch: multi-arch comment", mixed.includes("multi-arch"), true);
+check("single arch amd64 only", one.includes('key: kubernetes.io/arch\n          operator: In\n          values: ["amd64"]'), true);
+const arm = ky(["m7g"]);
+check("single arch arm64 only", arm.includes('key: kubernetes.io/arch\n          operator: In\n          values: ["arm64"]'), true);
+check("arm64 generation 7", arm.includes('values: ["7"]'), true);
+check("t3 generation 3", ky(["t3"]).includes('instance-generation\n          operator: In\n          values: ["3"]'), true);
+check("limits from reference (13 × 4 vCPU)", multi.includes('cpu: "52"'), true);
+check("unknown family ignored", ky(["zz9", "c6i"]).includes('values: ["c6i"]'), true);
 check("AWS HCL includes secondary association", awsTerraform(big, { clusterName: "demo" }).includes("aws_vpc_ipv4_cidr_block_association"), true);
 check("AWS HCL omits secondary when not needed", awsTerraform(small, { clusterName: "demo" }).includes("aws_vpc_ipv4_cidr_block_association"), false);
 check("GKE HCL has ip_allocation_policy", gcpTerraform(g, { clusterName: "demo", spotRatioPct: 50 }).includes("cluster_secondary_range_name"), true);

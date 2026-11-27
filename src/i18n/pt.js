@@ -347,6 +347,17 @@ const pt = {
           terraformGcp: "Terraform · GKE",
         },
       },
+      karpenter: {
+        bannerTitle: "Como este NodePool é gerado",
+        bannerBody:
+          "O YAML abaixo é montado ao vivo a partir das configurações de workload, nodes, Spot e CIDR acima. Você escolhe aqui as famílias de instância que o NodePool do Karpenter pode usar. Os números de sizing e custo continuam baseados na instância de referência ({type}) escolhida no painel de nodes.",
+        familiesLabel: "Famílias de instância permitidas",
+        familiesHint: "O Karpenter pode escolher qualquer família marcada no tamanho {size} (o mesmo da referência). Selecionadas: {families}.",
+        reference: "referência",
+        lastFamily: "Pelo menos uma família precisa ficar marcada, então {family} (a família da instância de referência) foi mantida.",
+        mixedArchWarning:
+          "Você misturou x86 (amd64) com Graviton (arm64). Num NodePool multi-arch, todas as imagens de container precisam ser multi-arch. O alias al2023@latest no amiSelectorTerms continua funcionando, porque o Karpenter resolve a AMI certa para cada arquitetura.",
+      },
     },
   },
 };

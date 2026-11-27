@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 
 // Small form/layout primitives for the /tools calculators.
+// Sizes/colors tuned for readability on the dark /tools page (body ~15px, captions ≥13px).
 
 export const inputClass =
-  "w-full rounded-[10px] bg-ink/70 px-3 py-2 font-mono text-sm text-white outline-none ring-1 ring-white/10 transition focus:ring-2 focus:ring-accent";
+  "w-full rounded-[10px] bg-ink/70 px-3 py-2.5 font-mono text-[15px] text-slate-100 outline-none ring-1 ring-white/15 transition focus:ring-2 focus:ring-accent";
 
 export const fmt = (str, vars = {}) =>
   String(str ?? "").replace(/\{(\w+)\}/g, (_, key) => (vars[key] !== undefined ? vars[key] : `{${key}}`));
@@ -12,12 +13,12 @@ const clamp = (v, min, max) => Math.min(Math.max(v, min ?? -Infinity), max ?? In
 
 export function Panel({ eyebrow, title, description, children, className = "" }) {
   return (
-    <section className={`surface-card p-5 sm:p-6 ${className}`}>
+    <section className={`surface-card p-5 sm:p-7 ${className}`}>
       {(eyebrow || title) && (
-        <header className="mb-5">
+        <header className="mb-6">
           {eyebrow && <p className="stat-label !text-accent">{eyebrow}</p>}
-          {title && <h2 className="mt-1 font-display text-xl font-bold tracking-tight text-white">{title}</h2>}
-          {description && <p className="mt-1.5 text-sm leading-relaxed text-muted">{description}</p>}
+          {title && <h2 className="mt-1 font-display text-2xl font-bold tracking-tight text-white">{title}</h2>}
+          {description && <p className="mt-2 text-[15px] leading-relaxed text-slate-300">{description}</p>}
         </header>
       )}
       {children}
@@ -28,16 +29,16 @@ export function Panel({ eyebrow, title, description, children, className = "" })
 export function Field({ label, htmlFor, hint, children, error }) {
   return (
     <div>
-      <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-medium text-white/90">
+      <label htmlFor={htmlFor} className="mb-2 block text-[15px] font-medium text-slate-100">
         {label}
       </label>
       {children}
       {error ? (
-        <p className="mt-1.5 text-xs text-red-300" role="alert">
+        <p className="mt-1.5 text-sm text-red-300" role="alert">
           {error}
         </p>
       ) : (
-        hint && <p className="mt-1.5 text-xs leading-relaxed text-muted">{hint}</p>
+        hint && <p className="mt-1.5 text-sm leading-relaxed text-slate-300">{hint}</p>
       )}
     </div>
   );
@@ -67,10 +68,10 @@ export function NumberInput({ id, value, onChange, min, max, step = 1, suffix, a
           if (e.target.value !== "" && Number.isFinite(v)) onChange(clamp(v, min, max));
         }}
         onBlur={() => setText(String(value))}
-        className={`${inputClass} ${suffix ? "pr-14" : ""}`}
+        className={`${inputClass} ${suffix ? "pr-16" : ""}`}
       />
       {suffix && (
-        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center font-mono text-xs text-muted">
+        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center font-mono text-[13px] text-slate-400">
           {suffix}
         </span>
       )}
@@ -92,7 +93,7 @@ export function SliderField({ id, label, hint, value, onChange, min, max, step =
           aria-label={label}
           className="h-1.5 w-full cursor-pointer accent-accent"
         />
-        <NumberInput id={id} value={value} onChange={onChange} min={min} max={max} step={step} suffix={suffix} className="w-32 shrink-0" />
+        <NumberInput id={id} value={value} onChange={onChange} min={min} max={max} step={step} suffix={suffix} className="w-36 shrink-0" />
       </div>
     </Field>
   );
@@ -112,11 +113,11 @@ export function Segmented({ label, options, value, onChange, size = "md" }) {
             aria-checked={active}
             onClick={() => onChange(opt.value)}
             className={`rounded-[9px] font-mono transition-colors ${
-              size === "lg" ? "px-4 py-2.5 text-sm" : "px-3 py-1.5 text-xs"
+              size === "lg" ? "px-4 py-2.5 text-[15px]" : "px-3 py-2 text-sm"
             } ${
               active
-                ? "bg-accent/15 text-white ring-1 ring-accent"
-                : "bg-white/[0.03] text-muted ring-1 ring-white/10 hover:text-white"
+                ? "bg-accent/20 text-white ring-1 ring-accent"
+                : "bg-white/[0.04] text-slate-300 ring-1 ring-white/15 hover:text-white"
             }`}
           >
             {opt.label}
@@ -138,7 +139,7 @@ export function Toggle({ id, checked, onChange, label, hint, disabled = false })
         disabled={disabled}
         onClick={() => onChange(!checked)}
         className={`relative mt-0.5 h-6 w-11 shrink-0 rounded-full transition-colors ${
-          checked ? "bg-accent" : "bg-white/10"
+          checked ? "bg-accent" : "bg-white/20"
         } ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
       >
         <span
@@ -148,18 +149,18 @@ export function Toggle({ id, checked, onChange, label, hint, disabled = false })
         />
       </button>
       <label htmlFor={id} className="cursor-pointer">
-        <span className="block text-sm font-medium text-white/90">{label}</span>
-        {hint && <span className="mt-0.5 block text-xs leading-relaxed text-muted">{hint}</span>}
+        <span className="block text-[15px] font-medium text-slate-100">{label}</span>
+        {hint && <span className="mt-1 block text-sm leading-relaxed text-slate-300">{hint}</span>}
       </label>
     </div>
   );
 }
 
 const TONES = {
-  info: "bg-accent/[0.07] ring-accent/30 text-white",
-  signal: "bg-signal/[0.08] ring-signal/50 text-white",
-  warn: "bg-amber-400/[0.08] ring-amber-300/50 text-white",
-  error: "bg-red-500/[0.08] ring-red-400/50 text-white",
+  info: "bg-accent/[0.09] ring-accent/40 text-white",
+  signal: "bg-signal/[0.09] ring-signal/50 text-white",
+  warn: "bg-amber-400/[0.09] ring-amber-300/50 text-white",
+  error: "bg-red-500/[0.09] ring-red-400/50 text-white",
 };
 const TONE_ICON = { info: "i", signal: "◆", warn: "!", error: "×" };
 const TONE_ICON_CLASS = {
@@ -177,13 +178,13 @@ export function Banner({ tone = "info", title, children, strong = false }) {
     >
       <span
         aria-hidden="true"
-        className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full font-mono text-xs font-bold ${TONE_ICON_CLASS[tone]}`}
+        className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full font-mono text-[13px] font-bold ${TONE_ICON_CLASS[tone]}`}
       >
         {TONE_ICON[tone]}
       </span>
-      <div className="min-w-0 text-sm leading-relaxed">
-        {title && <p className={`font-semibold ${strong ? "font-display text-base" : ""}`}>{title}</p>}
-        <div className={`${title ? "mt-1" : ""} text-white/75`}>{children}</div>
+      <div className="min-w-0 text-[15px] leading-relaxed">
+        {title && <p className={`font-semibold text-slate-50 ${strong ? "font-display text-base" : ""}`}>{title}</p>}
+        <div className={`${title ? "mt-1" : ""} text-slate-200`}>{children}</div>
       </div>
     </div>
   );
@@ -196,7 +197,7 @@ export function Badge({ tone = "accent", children }) {
     warn: "bg-amber-300/15 text-amber-200 ring-amber-300/40",
   }[tone];
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-1 font-mono text-[11px] font-medium uppercase tracking-wide ring-1 ${cls}`}>
+    <span className={`inline-flex items-center rounded-full px-2.5 py-1 font-mono text-[13px] font-medium uppercase tracking-wide ring-1 ${cls}`}>
       {children}
     </span>
   );
@@ -214,7 +215,7 @@ export function UtilBar({ value, label }) {
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={Math.round(pct)}
-      className="h-2 w-full overflow-hidden rounded-full bg-white/[0.06]"
+      className="h-2 w-full overflow-hidden rounded-full bg-white/[0.10]"
     >
       <div className={`h-full rounded-full transition-all duration-300 ${color}`} style={{ width: `${Math.max(pct, 2)}%` }} />
     </div>
@@ -223,10 +224,10 @@ export function UtilBar({ value, label }) {
 
 export function Stat({ label, value, sub }) {
   return (
-    <div className="rounded-[12px] bg-white/[0.02] p-3 ring-1 ring-white/[0.06]">
+    <div className="rounded-[12px] bg-white/[0.03] p-3.5 ring-1 ring-white/[0.12]">
       <p className="stat-label">{label}</p>
-      <p className="mt-1 font-mono text-base text-white">{value}</p>
-      {sub && <p className="mt-0.5 text-xs text-muted">{sub}</p>}
+      <p className="mt-1 font-mono text-lg text-white">{value}</p>
+      {sub && <p className="mt-0.5 text-[13px] text-slate-300">{sub}</p>}
     </div>
   );
 }

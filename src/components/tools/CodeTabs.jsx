@@ -42,8 +42,8 @@ export default function CodeTabs({ tabs, labels }) {
   };
 
   return (
-    <div className="overflow-hidden rounded-[14px] bg-ink ring-1 ring-white/10">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.08] px-2 py-2">
+    <div className="overflow-hidden rounded-[14px] bg-ink ring-1 ring-white/15">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.12] px-2 py-2">
         <div role="tablist" aria-label={labels.tablist} className="flex flex-wrap gap-1">
           {tabs.map((tab) => {
             const selected = tab.id === current.id;
@@ -56,8 +56,8 @@ export default function CodeTabs({ tabs, labels }) {
                 aria-selected={selected}
                 aria-controls={`${baseId}-panel`}
                 onClick={() => setActive(tab.id)}
-                className={`rounded-[8px] px-3 py-1.5 text-xs font-medium transition-colors ${
-                  selected ? "bg-white/[0.08] text-white" : "text-muted hover:text-white"
+                className={`rounded-[8px] px-3.5 py-2 text-sm font-medium transition-colors ${
+                  selected ? "bg-white/[0.10] text-white ring-1 ring-white/15" : "text-slate-300 hover:text-white"
                 }`}
               >
                 {tab.label}
@@ -66,24 +66,24 @@ export default function CodeTabs({ tabs, labels }) {
           })}
         </div>
         <div className="flex items-center gap-2">
-          <span aria-live="polite" className="font-mono text-[11px] text-signal">
+          <span aria-live="polite" className="font-mono text-[13px] text-signal">
             {copied === "ok" ? labels.copied : copied === "fail" ? labels.copyFailed : ""}
           </span>
-          <button type="button" onClick={onCopy} className="btn-ghost !px-3 !py-1.5 !text-xs">
+          <button type="button" onClick={onCopy} className="btn-ghost !px-3.5 !py-2 !text-sm">
             {copied === "ok" ? "✓ " : ""}
             {labels.copy}
           </button>
         </div>
       </div>
       {current.filename && (
-        <p className="border-b border-white/[0.05] px-4 py-2 font-mono text-[11px] text-muted">{current.filename}</p>
+        <p className="border-b border-white/[0.10] px-4 py-2 font-mono text-[13px] text-slate-300">{current.filename}</p>
       )}
       <pre
         id={`${baseId}-panel`}
         role="tabpanel"
         aria-labelledby={`${baseId}-tab-${current.id}`}
         tabIndex={0}
-        className="max-h-[560px] overflow-auto p-4 font-mono text-[12.5px] leading-relaxed text-white/85"
+        className="max-h-[640px] overflow-auto p-5 font-mono text-[13.5px] leading-[1.65] text-slate-100"
       >
         <code>{current.code}</code>
       </pre>
