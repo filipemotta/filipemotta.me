@@ -15,6 +15,7 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import PostsPage from "./pages/PostsPage";
 import PostPage from "./pages/PostPage";
+import ToolsPage from "./pages/ToolsPage";
 
 function Home() {
   const activeSection = useActiveSection();
@@ -71,6 +72,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/posts" element={<PostsPage />} />
         <Route path="/posts/:slug" element={<PostPage />} />
+        <Route path="/tools" element={<ToolsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
