@@ -73,6 +73,7 @@ export default function App() {
         <Route path="/posts" element={<PostsPage />} />
         <Route path="/posts/:slug" element={<PostPage />} />
         <Route path="/tools" element={<ToolsPage />} />
+        <Route path="/tools/:toolId" element={<ToolsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>

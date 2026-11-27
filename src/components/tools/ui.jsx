@@ -195,6 +195,7 @@ export function Badge({ tone = "accent", children }) {
     accent: "bg-accent/15 text-accent ring-accent/40",
     signal: "bg-signal/15 text-signal ring-signal/40",
     warn: "bg-amber-300/15 text-amber-200 ring-amber-300/40",
+    danger: "bg-red-500/15 text-red-200 ring-red-400/40",
   }[tone];
   return (
     <span className={`inline-flex items-center rounded-full px-2.5 py-1 font-mono text-[13px] font-medium uppercase tracking-wide ring-1 ${cls}`}>
