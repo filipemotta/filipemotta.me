@@ -347,6 +347,17 @@ const en = {
           terraformGcp: "Terraform · GKE",
         },
       },
+      karpenter: {
+        bannerTitle: "How this NodePool is generated",
+        bannerBody:
+          "The YAML below is generated live from the workload, node, Spot and CIDR settings above. Here you choose which instance families the Karpenter NodePool may use. Sizing and cost numbers still use the single reference instance ({type}) selected in the node panel.",
+        familiesLabel: "Allowed instance families",
+        familiesHint: "Karpenter may pick any selected family at size {size} (same as the reference). Selected: {families}.",
+        reference: "reference",
+        lastFamily: "At least one family must stay selected, so {family} (the reference instance's family) was kept.",
+        mixedArchWarning:
+          "You mixed x86 (amd64) and Graviton (arm64). A mixed-arch NodePool requires multi-arch container images for everything scheduled on it. The al2023@latest alias in amiSelectorTerms still works, because Karpenter resolves the right AMI per architecture.",
+      },
     },
   },
 };

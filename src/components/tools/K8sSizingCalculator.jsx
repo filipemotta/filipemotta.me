@@ -10,9 +10,10 @@ import {
   NODE_SUBNET_HEADROOM,
   calculateAws,
   calculateGcp,
+  findAwsInstance,
   parseCidr,
 } from "../../utils/k8sSizing";
-import { awsTerraform, eniConfigYaml, gcpTerraform, karpenterYaml, safeName } from "../../utils/k8sCodegen";
+import { awsTerraform, eniConfigYaml, gcpTerraform, instanceSize, karpenterYaml, resolveFamilies, safeName } from "../../utils/k8sCodegen";
 import CodeTabs from "./CodeTabs";
 import { Badge, Banner, Field, NumberInput, Panel, Segmented, SliderField, Stat, Toggle, UtilBar, fmt, inputClass } from "./ui";
 
@@ -44,11 +45,27 @@ const DEFAULTS = {
   masterCidr: "172.16.0.0/28",
 };
 
+// Distinct EC2 families in the catalog, in catalog order: [{ family, arch }]
+const AWS_FAMILIES = [...new Map(AWS_INSTANCES.map((i) => [i.family, { family: i.family, arch: i.arch }])).values()];
+const familyOf = (type) => findAwsInstance(type)?.family || String(type).split(".")[0];
+
 export default function K8sSizingCalculator({ initial }) {
   const { t, lang } = useLanguage();
   const k = (key) => t(`tools.k8s.${key}`);
-  const [s, setS] = useState(() => ({ ...DEFAULTS, ...initial }));
-  const set = (key) => (value) => setS((prev) => ({ ...prev, [key]: value }));
+  const [s, setS] = useState(() => {
+    const merged = { ...DEFAULTS, ...initial };
+    return { ...merged, karpenterFamilies: merged.karpenterFamilies?.length ? merged.karpenterFamilies : [familyOf(merged.instanceType)] };
+  });
+  const set = (key) => (value) =>
+    setS((prev) => {
+      const next = { ...prev, [key]: value };
+      // A new reference instance always keeps its family allowed in the NodePool.
+      if (key === "instanceType") {
+        const fam = familyOf(value);
+        if (!prev.karpenterFamilies.includes(fam)) next.karpenterFamilies = [...prev.karpenterFamilies, fam];
+      }
+      return next;
+    });
 
   const locale = lang === "pt" ? "pt-BR" : "en-US";
   const num = (v, digits = 0) =>
@@ -79,7 +96,7 @@ export default function K8sSizingCalculator({ initial }) {
       <div className="surface-card flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
         <div>
           <p className="stat-label">{k("provider.label")}</p>
-          <p className="mt-1 text-sm text-muted">{k("provider.hint")}</p>
+          <p className="mt-1 text-[15px] text-slate-300">{k("provider.hint")}</p>
         </div>
         <Segmented
           label={k("provider.label")}
@@ -141,11 +158,11 @@ export default function K8sSizingCalculator({ initial }) {
               <div className="surface-card col-span-2 p-4 sm:col-span-1">
                 <p className="stat-label">{k("kpi.nodes")}</p>
                 <p className="mt-2 font-display text-4xl font-bold text-white">{nodesValid ? num(res.nodes.withSurge) : "—"}</p>
-                <p className="mt-1 text-xs text-muted">
+                <p className="mt-1 text-sm text-slate-300">
                   {fmt(k("kpi.nodesSub"), { steady: num(res.nodes.steady), surge: s.surgePct })}
                 </p>
                 {res.nodes.azFloorApplied && (
-                  <p className="mt-2 text-xs text-amber-200">{fmt(k("kpi.azFloor"), { n: s.azCount })}</p>
+                  <p className="mt-2 text-sm text-amber-200">{fmt(k("kpi.azFloor"), { n: s.azCount })}</p>
                 )}
               </div>
 
@@ -155,9 +172,9 @@ export default function K8sSizingCalculator({ initial }) {
                   {num(res.pods.effective)}
                   <span className="text-xl text-muted"> / {num(res.limit.limit)}</span>
                 </p>
-                <p className="mt-1 text-xs text-muted">{isAws ? k("kpi.podsPerNodeSubAws") : k("kpi.podsPerNodeSubGcp")}</p>
+                <p className="mt-1 text-sm text-slate-300">{isAws ? k("kpi.podsPerNodeSubAws") : k("kpi.podsPerNodeSubGcp")}</p>
                 {nodesValid && (
-                  <p className="mt-1 text-xs text-muted">
+                  <p className="mt-1 text-sm text-slate-300">
                     {fmt(k("kpi.avgPods"), { n: num(s.desiredPods / res.nodes.steady, 1) })}
                   </p>
                 )}
@@ -177,10 +194,10 @@ export default function K8sSizingCalculator({ initial }) {
                     <div
                       key={key}
                       className={`rounded-[10px] p-2 ring-1 ${
-                        res.pods.bottleneck === key ? "bg-accent/10 ring-accent/50" : "bg-white/[0.02] ring-white/[0.06]"
+                        res.pods.bottleneck === key ? "bg-accent/10 ring-accent/50" : "bg-white/[0.02] ring-white/[0.12]"
                       }`}
                     >
-                      <dt className="stat-label !text-[10px]">{label}</dt>
+                      <dt className="stat-label">{label}</dt>
                       <dd className="mt-0.5 font-mono text-sm text-white">{num(value)}</dd>
                     </div>
                   ))}
@@ -195,14 +212,14 @@ export default function K8sSizingCalculator({ initial }) {
                 <div className="mt-3">
                   <UtilBar value={res.ip.utilization} label={isAws ? k("kpi.ipAws") : k("kpi.ipGcp")} />
                 </div>
-                <p className="mt-2 text-xs text-muted">
+                <p className="mt-2 text-sm text-slate-300">
                   {fmt(k("kpi.ipSub"), { used: num(res.ip.used), available: num(res.ip.available) })}
                 </p>
-                {nodesValid && !(res.ip.utilization <= 1) && <p className="mt-2 text-xs text-red-300">{k("kpi.ipNoFit")}</p>}
+                {nodesValid && !(res.ip.utilization <= 1) && <p className="mt-2 text-sm text-red-300">{k("kpi.ipNoFit")}</p>}
                 {res.ip.utilization > 0.8 && res.ip.utilization <= 1 && (
-                  <p className="mt-2 text-xs text-amber-200">{isAws ? k("kpi.ipHighAws") : k("kpi.ipHighGcp")}</p>
+                  <p className="mt-2 text-sm text-amber-200">{isAws ? k("kpi.ipHighAws") : k("kpi.ipHighGcp")}</p>
                 )}
-                {isAws && res.secondaryRequired && <p className="mt-2 text-xs text-signal">{k("kpi.ipSecondary")}</p>}
+                {isAws && res.secondaryRequired && <p className="mt-2 text-sm text-signal">{k("kpi.ipSecondary")}</p>}
               </div>
 
               <div className="surface-card col-span-2 p-4">
@@ -211,7 +228,7 @@ export default function K8sSizingCalculator({ initial }) {
                   {usd(res.cost.total)}
                   <span className="text-base font-medium text-muted">{k("kpi.perMonth")}</span>
                 </p>
-                <dl className="mt-3 space-y-1.5 text-xs">
+                <dl className="mt-3 space-y-2 text-sm">
                   <CostRow label={isAws ? k("kpi.costControlAws") : k("kpi.costControlGcp")} value={usd(res.cost.controlPlaneMonthly)} />
                   <CostRow
                     label={fmt(k("kpi.costOd"), { n: res.cost.odNodes, price: usd(spec.od, 4) })}
@@ -222,7 +239,7 @@ export default function K8sSizingCalculator({ initial }) {
                     value={usd(res.cost.spotMonthly)}
                   />
                 </dl>
-                <p className="mt-3 text-[11px] leading-relaxed text-muted">
+                <p className="mt-3 text-[13px] leading-relaxed text-slate-300">
                   {fmt(isAws ? k("kpi.priceNoteAws") : k("kpi.priceNoteGcp"), { hours: HOURS_PER_MONTH })}
                 </p>
               </div>
@@ -248,6 +265,15 @@ export default function K8sSizingCalculator({ initial }) {
             <Banner tone="warn">{k("code.issuesWarning")}</Banner>
           </div>
         )}
+        {code.length > 0 && isAws && (
+          <KarpenterFamilies
+            k={k}
+            selected={s.karpenterFamilies}
+            refType={res.instance.type}
+            refFamily={res.instance.family}
+            onChange={set("karpenterFamilies")}
+          />
+        )}
         {code.length > 0 ? (
           <CodeTabs
             tabs={code.map((c) => ({ ...c, label: k(`code.tabs.${c.id}`) }))}
@@ -257,6 +283,71 @@ export default function K8sSizingCalculator({ initial }) {
           <Banner tone="error">{k("code.invalid")}</Banner>
         )}
       </Panel>
+    </div>
+  );
+}
+
+/** Banner + toggle chips choosing the EC2 families allowed in the Karpenter NodePool. YAML only. */
+function KarpenterFamilies({ k, selected, refType, refFamily, onChange }) {
+  const [notice, setNotice] = useState(false);
+  const sel = resolveFamilies(selected, refFamily, AWS_INSTANCES);
+
+  const toggle = (family) => {
+    if (selected.includes(family)) {
+      if (selected.length === 1) {
+        // Never allow an empty selection: fall back to the reference family.
+        if (family !== refFamily) onChange([refFamily]);
+        setNotice(true);
+        return;
+      }
+      onChange(selected.filter((f) => f !== family));
+    } else {
+      onChange([...selected, family]);
+    }
+    setNotice(false);
+  };
+
+  return (
+    <div className="mb-5 space-y-4">
+      <Banner tone="info" title={k("karpenter.bannerTitle")}>
+        {fmt(k("karpenter.bannerBody"), { type: refType })}
+      </Banner>
+
+      <div>
+        <p id="karpenter-families-label" className="mb-2 block text-[15px] font-medium text-slate-100">
+          {k("karpenter.familiesLabel")}
+        </p>
+        <div role="group" aria-labelledby="karpenter-families-label" className="flex flex-wrap gap-2">
+          {AWS_FAMILIES.map(({ family, arch }) => {
+            const on = selected.includes(family);
+            return (
+              <button
+                key={family}
+                type="button"
+                aria-pressed={on}
+                onClick={() => toggle(family)}
+                className={`rounded-[10px] px-3.5 py-2 font-mono text-sm transition-colors ${
+                  on ? "bg-accent/20 text-white ring-1 ring-accent" : "bg-white/[0.04] text-slate-300 ring-1 ring-white/15 hover:text-white"
+                }`}
+              >
+                {on ? "✓ " : ""}
+                {family} <span className={on ? "text-signal" : "text-slate-400"}>({arch})</span>
+                {family === refFamily && <span className="ml-1.5 text-[13px] text-slate-400">· {k("karpenter.reference")}</span>}
+              </button>
+            );
+          })}
+        </div>
+        <p className="mt-2 text-sm leading-relaxed text-slate-300">
+          {fmt(k("karpenter.familiesHint"), { size: instanceSize(refType), families: sel.families.join(", ") })}
+        </p>
+        {notice && (
+          <p className="mt-2 text-sm text-amber-200" role="status">
+            {fmt(k("karpenter.lastFamily"), { family: refFamily })}
+          </p>
+        )}
+      </div>
+
+      {sel.mixedArch && <Banner tone="warn">{k("karpenter.mixedArchWarning")}</Banner>}
     </div>
   );
 }
@@ -281,11 +372,10 @@ function hasPlanIssues(res) {
 function buildCode(res, s) {
   if (!res.nodes.valid) return [];
   if (res.provider === "aws") {
-    if (!res.cidr || res.cidr.error || !res.cidr.primary.fitsInVpc) {
-      return [{ id: "karpenter", filename: "karpenter-nodepool.yaml", code: karpenterYaml(res, s) }];
-    }
+    const karpenter = { id: "karpenter", filename: "karpenter-nodepool.yaml", code: karpenterYaml(res, { ...s, families: s.karpenterFamilies }) };
+    if (!res.cidr || res.cidr.error || !res.cidr.primary.fitsInVpc) return [karpenter];
     const tabs = [
-      { id: "karpenter", filename: "karpenter-nodepool.yaml", code: karpenterYaml(res, s) },
+      karpenter,
       { id: "terraformAws", filename: "vpc.tf", code: awsTerraform(res, s) },
     ];
     const eni = res.secondaryRequired ? eniConfigYaml(res) : "";
@@ -332,10 +422,10 @@ function AwsNodePanel({ s, set, res, k, usd }) {
           />
         </Field>
 
-        <div className="rounded-[12px] bg-ink/60 p-3 ring-1 ring-white/[0.06]">
+        <div className="rounded-[12px] bg-ink/60 p-3 ring-1 ring-white/[0.12]">
           <p className="stat-label">{k("aws.formula")}</p>
           <p className="mt-1 break-words font-mono text-sm text-white">maxPods = {formula}</p>
-          <p className="mt-1 text-xs text-muted">
+          <p className="mt-1 text-sm text-slate-300">
             {res.limit.capped
               ? fmt(k("aws.formulaCapped"), { cap: res.limit.cap, limit: res.limit.limit })
               : fmt(k("aws.formulaUncapped"), { limit: res.limit.limit })}
@@ -363,7 +453,7 @@ function SubnetTable({ rows, k, num }) {
     <div className="overflow-x-auto">
       <table className="w-full min-w-[460px] text-left text-sm">
         <thead>
-          <tr className="border-b border-white/[0.08]">
+          <tr className="border-b border-white/[0.14]">
             {[k("cidr.colZone"), k("cidr.colCidr"), k("cidr.colUsable"), k("cidr.colRequired")].map((h) => (
               <th key={h} scope="col" className="stat-label py-2 pr-3 font-medium">
                 {h}
@@ -373,7 +463,7 @@ function SubnetTable({ rows, k, num }) {
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.zone} className="border-b border-white/[0.04] last:border-0">
+            <tr key={r.zone} className="border-b border-white/[0.08] last:border-0">
               <td className="py-2 pr-3 font-mono text-muted">{r.zone}</td>
               <td className="py-2 pr-3 font-mono text-white">{r.cidr}</td>
               <td className="py-2 pr-3 font-mono text-white">{num(r.usable)}</td>
@@ -408,14 +498,14 @@ function AwsCidrPanel({ s, set, res, k, num }) {
         <Field label={k("cidr.subnetPrefix")} hint={k("cidr.subnetPrefixHint")}>
           <Segmented label={k("cidr.subnetPrefix")} value={s.subnetPrefix} onChange={set("subnetPrefix")} options={prefixOptions} />
           {s.subnetPrefix !== "auto" && (
-            <button type="button" onClick={() => set("subnetPrefix")("auto")} className="mt-2 text-xs text-accent hover:underline">
+            <button type="button" onClick={() => set("subnetPrefix")("auto")} className="mt-2 text-sm text-accent hover:underline">
               {k("cidr.autoRecommend")}
             </button>
           )}
         </Field>
       </div>
 
-      <p className="mt-5 rounded-[12px] bg-white/[0.02] p-3 text-xs leading-relaxed text-muted ring-1 ring-white/[0.06]">
+      <p className="mt-5 rounded-[12px] bg-white/[0.02] p-3.5 text-sm leading-relaxed text-slate-300 ring-1 ring-white/[0.12]">
         {res.secondaryRequired ? fmt(k("cidr.modelCustom"), { headroom: NODE_SUBNET_HEADROOM * 100 }) : pd ? k("cidr.modelPd") : k("cidr.modelOff")}
       </p>
 
@@ -457,14 +547,14 @@ function AwsCidrPanel({ s, set, res, k, num }) {
                 <Badge tone="signal">{k("cidr.secondaryBadge")}</Badge>
                 <h3 className="font-display text-lg font-bold text-white">{k("cidr.secondaryTitle")}</h3>
               </div>
-              <p className="mt-2 text-sm leading-relaxed text-white/80">
+              <p className="mt-2 text-[15px] leading-relaxed text-slate-200">
                 {res.secondaryReason === "capacity" ? k("cidr.secondaryWhyCapacity") : k("cidr.secondaryWhyCustom")}
               </p>
               {res.secondaryReason === "capacity" && (
-                <p className="mt-2 text-xs leading-relaxed text-amber-200">{k("cidr.secondaryAutoNote")}</p>
+                <p className="mt-2 text-sm leading-relaxed text-amber-200">{k("cidr.secondaryAutoNote")}</p>
               )}
               {res.secondaryReason === "capacity" && s.subnetPrefix !== "auto" && (
-                <p className="mt-2 text-xs leading-relaxed text-white/70">{k("cidr.secondaryTryAuto")}</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">{k("cidr.secondaryTryAuto")}</p>
               )}
 
               <div className="mt-4 max-w-sm">
@@ -486,7 +576,7 @@ function AwsCidrPanel({ s, set, res, k, num }) {
                     num={num}
                     rows={sec.subnets.map((c, i) => ({ zone: res.zones[i], cidr: c, usable: sec.usable, required: sec.requiredPerAz }))}
                   />
-                  <p className="text-xs text-muted">
+                  <p className="text-sm text-slate-300">
                     {fmt(k("cidr.secondaryTotals"), { used: num(sec.totalRequired), available: num(sec.totalUsable) })}
                   </p>
                   {!sec.fits && (
@@ -556,13 +646,13 @@ function GcpNodePanel({ s, set, res, k, usd, num }) {
 
 function RangeCard({ title, badge, badgeTone = "signal", id, base, onBase, baseLabel, cidr, lines, error }) {
   return (
-    <div className="rounded-[14px] bg-white/[0.02] p-4 ring-1 ring-white/[0.08]">
+    <div className="rounded-[14px] bg-white/[0.03] p-4 ring-1 ring-white/[0.12]">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-sm font-semibold text-white">{title}</h3>
         {badge && <Badge tone={badgeTone}>{badge}</Badge>}
       </div>
       <p className="mt-3 font-mono text-xl text-white">{cidr || "—"}</p>
-      <ul className="mt-2 space-y-0.5 text-xs text-muted">
+      <ul className="mt-2 space-y-0.5 text-sm text-slate-300">
         {lines.filter(Boolean).map((l) => (
           <li key={l}>{l}</li>
         ))}
@@ -573,7 +663,7 @@ function RangeCard({ title, badge, badgeTone = "signal", id, base, onBase, baseL
         </label>
         <input id={id} className={inputClass} value={base} onChange={(e) => onBase(e.target.value)} spellCheck={false} aria-invalid={Boolean(error)} />
         {error && (
-          <p className="mt-1 text-xs text-red-300" role="alert">
+          <p className="mt-1 text-sm text-red-300" role="alert">
             {error}
           </p>
         )}
@@ -666,11 +756,11 @@ function GcpCidrPanel({ s, set, res, k, num }) {
       {res.nodes.valid && (
         <div className="mt-6">
           <h3 className="text-sm font-semibold text-white">{k("gcpCidr.compareTitle")}</h3>
-          <p className="mt-1 text-xs text-muted">{k("gcpCidr.compareText")}</p>
+          <p className="mt-1 text-sm text-slate-300">{k("gcpCidr.compareText")}</p>
           <div className="mt-3 overflow-x-auto">
             <table className="w-full min-w-[520px] text-left text-sm">
               <thead>
-                <tr className="border-b border-white/[0.08]">
+                <tr className="border-b border-white/[0.14]">
                   {["colMaxPods", "colBlock", "colNodes", "colPodRange", "colIps"].map((c) => (
                     <th key={c} scope="col" className="stat-label py-2 pr-3 font-medium">
                       {k(`gcpCidr.${c}`)}
@@ -682,12 +772,12 @@ function GcpCidrPanel({ s, set, res, k, num }) {
                 {res.comparison.map((row) => {
                   const current = row.maxPods === s.maxPodsPerNode;
                   return (
-                    <tr key={row.maxPods} className={`border-b border-white/[0.04] last:border-0 ${current ? "bg-accent/[0.07]" : ""}`}>
+                    <tr key={row.maxPods} className={`border-b border-white/[0.08] last:border-0 ${current ? "bg-accent/[0.07]" : ""}`}>
                       <td className="py-2 pr-3 font-mono text-white">
                         {row.maxPods}
-                        {current && <span className="ml-2 text-[11px] text-accent">{k("gcpCidr.current")}</span>}
+                        {current && <span className="ml-2 text-[13px] text-accent">{k("gcpCidr.current")}</span>}
                         {row.maxPods === res.recommendedMaxPods && !current && (
-                          <span className="ml-2 text-[11px] text-signal">{k("gcpCidr.recommended")}</span>
+                          <span className="ml-2 text-[13px] text-signal">{k("gcpCidr.recommended")}</span>
                         )}
                       </td>
                       <td className="py-2 pr-3 font-mono text-muted">

@@ -63,6 +63,21 @@ body {
   }
 }
 
+/* /tools only: wider container and a readability pass scoped under .tools-scope.
+   Global classes (.container-site, .stat-label, .surface-card) are untouched elsewhere. */
+.container-tools { margin-inline: auto; width: 100%; max-width: 1360px; padding-inline: 1.25rem; }
+@media (min-width: 640px) { .container-tools { padding-inline: 2rem; } }
+@media (min-width: 1024px) { .container-tools { padding-inline: 2.5rem; } }
+
+/* :where() keeps specificity at one class, so hover:/state utilities still win. */
+.tools-scope { color: #e2e8f0; font-size: 15px; }
+:where(.tools-scope) .text-muted { color: #b8c7d9; }
+:where(.tools-scope) .stat-label { font-size: 13px; color: #b8c7d9; }
+:where(.tools-scope) .surface-card {
+  background-color: #0e131b;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.13), 0 1px 0 rgba(255, 255, 255, 0.03), 0 12px 32px -18px rgba(0, 0, 0, 0.8);
+}
+
 /* Used by the Posts area (cards, nav). */
 .glass-panel {
   background: #0b0f15;
