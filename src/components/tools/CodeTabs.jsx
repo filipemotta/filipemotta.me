@@ -21,6 +21,19 @@ async function copyText(text) {
   }
 }
 
+const COMMENT_LINE = /^\s*(#|\/\/)/;
+
+/** Renders code line by line so comment lines get their own color. Text content stays identical to `code`. */
+function CodeLines({ code }) {
+  const lines = code.split("\n");
+  return lines.map((line, i) => (
+    <span key={i} className={COMMENT_LINE.test(line) ? "tools-code-comment" : undefined}>
+      {line}
+      {i < lines.length - 1 ? "\n" : ""}
+    </span>
+  ));
+}
+
 /** Tabs of generated code, each with a Copy button. tabs: [{ id, label, code, filename }] */
 export default function CodeTabs({ tabs, labels }) {
   const [active, setActive] = useState(tabs[0]?.id);
@@ -42,8 +55,8 @@ export default function CodeTabs({ tabs, labels }) {
   };
 
   return (
-    <div className="overflow-hidden rounded-[14px] bg-ink ring-1 ring-white/15">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.12] px-2 py-2">
+    <div className="tools-code overflow-hidden rounded-[14px]">
+      <div className="tools-code-chrome flex flex-wrap items-center justify-between gap-2 border-b px-2 py-2">
         <div role="tablist" aria-label={labels.tablist} className="flex flex-wrap gap-1">
           {tabs.map((tab) => {
             const selected = tab.id === current.id;
@@ -76,16 +89,18 @@ export default function CodeTabs({ tabs, labels }) {
         </div>
       </div>
       {current.filename && (
-        <p className="border-b border-white/[0.10] px-4 py-2 font-mono text-[13px] text-slate-300">{current.filename}</p>
+        <p className="tools-code-chrome border-b px-4 py-2 font-mono text-[13px] text-slate-200">{current.filename}</p>
       )}
       <pre
         id={`${baseId}-panel`}
         role="tabpanel"
         aria-labelledby={`${baseId}-tab-${current.id}`}
         tabIndex={0}
-        className="max-h-[640px] overflow-auto p-5 font-mono text-[13.5px] leading-[1.65] text-slate-100"
+        className="tools-code-pre max-h-[640px] overflow-auto p-5 font-mono text-[13.5px] leading-[1.65]"
       >
-        <code>{current.code}</code>
+        <code>
+          <CodeLines code={current.code} />
+        </code>
       </pre>
     </div>
   );

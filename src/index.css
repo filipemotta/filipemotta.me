@@ -78,6 +78,22 @@ body {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.13), 0 1px 0 rgba(255, 255, 255, 0.03), 0 12px 32px -18px rgba(0, 0, 0, 0.8);
 }
 
+/* Generated code (CodeTabs): deep surface, crisp light-yellow text, comment lines in amber. */
+.tools-scope .tools-code {
+  background-color: #04070d;
+  border: 1px solid rgba(254, 240, 138, 0.22);
+  box-shadow: 0 12px 32px -18px rgba(0, 0, 0, 0.85);
+}
+.tools-scope .tools-code-chrome { background-color: #0a0f18; border-color: rgba(255, 255, 255, 0.12); }
+.tools-scope .tools-code-pre {
+  background-color: #04070d;
+  color: #fef08a;
+  -webkit-font-smoothing: antialiased;
+}
+.tools-scope .tools-code-pre::selection,
+.tools-scope .tools-code-pre ::selection { background-color: rgba(254, 240, 138, 0.28); color: #ffffff; }
+.tools-scope .tools-code-comment { color: #fcd34d; }
+
 /* Used by the Posts area (cards, nav). */
 .glass-panel {
   background: #0b0f15;
