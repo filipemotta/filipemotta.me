@@ -20,3 +20,14 @@
   from = "/posts/*"
   to = "/index.html"
   status = 200
+
+# Unlisted /tools route (direct URL only, not linked anywhere on the site).
+[[redirects]]
+  from = "/tools"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/tools/*"
+  to = "/index.html"
+  status = 200
