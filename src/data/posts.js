@@ -28,6 +28,29 @@
  */
 const posts = [
   {
+    slug: "cloudwatch-otel-enrichment-tag-enrichment-default",
+    date: "2026-11-28",
+    title: {
+      en: "CloudWatch's free OpenTelemetry enrichment and the EnableTagEnrichment trap",
+      pt: "O enrichment OpenTelemetry gratuito do CloudWatch e a armadilha do EnableTagEnrichment",
+    },
+    sourceUrl: "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-OTelEnrichment.html",
+    sourceLabel: { en: "AWS CloudWatch docs", pt: "Documentação do AWS CloudWatch" },
+    tags: ["AWS", "CloudWatch", "OpenTelemetry", "FinOps", "Terraform"],
+    text: {
+      en: `Basic OpenTelemetry enrichment in CloudWatch costs nothing and makes classic vended metrics like EC2 CPUUtilization queryable with PromQL, with the resource ARN, Region and account attached. AWS announced it yesterday. The default runs the other way though. Omit EnableTagEnrichment in the API call, the CloudFormation resource or Terraform and CloudWatch turns on resource tag enrichment, which is charged for the data points that receive tag labels. Setting up CloudWatch Omni starts you on basic. The CLI and your IaC don't. https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-OTelEnrichment.html
+
+So the flag belongs in the first commit. \`aws cloudwatch start-otel-enrichment --no-enable-tag-enrichment\` is the free version, while the Terraform example in the docs, with no arguments, starts the paid one.
+
+Fixing it later has its own trap. Calling start-otel-enrichment again with the right flag on an account where enrichment already runs is a no-op that ignores the flag. The change goes through update-otel-enrichment. That call also replaces both filter lists, so the namespaces you already filter have to go in the same request.`,
+      pt: `O basic OpenTelemetry enrichment do CloudWatch não custa nada e torna métricas vended clássicas, como o CPUUtilization do EC2, consultáveis com PromQL, já com o ARN do recurso, a Region e a conta anexados. A AWS anunciou ontem. Só que o padrão vai na direção contrária. Se você omitir o EnableTagEnrichment na chamada de API, no recurso do CloudFormation ou no Terraform, o CloudWatch liga o resource tag enrichment, que é cobrado pelos data points que recebem labels de tags. Configurar pelo CloudWatch Omni começa no basic. A CLI e o seu IaC não. https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-OTelEnrichment.html
+
+Então a flag precisa estar no primeiro commit. \`aws cloudwatch start-otel-enrichment --no-enable-tag-enrichment\` é a versão gratuita, enquanto o exemplo de Terraform da documentação, sem argumentos, inicia a versão paga.
+
+Corrigir depois tem sua própria armadilha. Chamar start-otel-enrichment de novo com a flag certa numa conta onde o enrichment já está rodando é um no-op que ignora a flag. A mudança passa pelo update-otel-enrichment. Essa chamada também substitui as duas listas de filtros, então os namespaces que você já filtra precisam ir na mesma requisição.`,
+    },
+  },
+  {
     slug: "1password-incident-github-actions-environment-secrets",
     date: "2026-11-27",
     title: {
